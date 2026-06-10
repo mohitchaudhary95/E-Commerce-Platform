@@ -1,7 +1,5 @@
 using System.Text;
 using ECommerce.Identity.Application.Features.Commands;
-using ECommerce.Identity.Application.Features.Validators;
-using ECommerce.Identity.Application.Interfaces;
 using ECommerce.Identity.Infrastructure.Persistence;
 using ECommerce.Identity.Infrastructure.Repositories;
 using ECommerce.Identity.Infrastructure.Services;
@@ -12,8 +10,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
-//using Microsoft.OpenApi.Models;
 using Serilog;
+using static ECommerce.Identity.Application.Interfaces.IIdentityInterfaces;
 namespace ECommerce.Identity.API
 {
     public class Program

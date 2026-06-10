@@ -4,7 +4,9 @@ using System.Text;
 
 namespace ECommerce.Identity.Domain.Enums
 {
-    internal class UserRole
+    public enum UserRole
     {
+        Customer,
+        Admin
     }
 }
