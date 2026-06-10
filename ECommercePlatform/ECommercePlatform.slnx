@@ -1,0 +1,18 @@
+<Solution>
+  <Folder Name="/src/" />
+  <Folder Name="/src/Gateway/">
+    <Project Path="ECommerce.Gateway/ECommerce.Gateway.csproj" Id="a6bd1a37-6016-4095-b320-300598633091" />
+  </Folder>
+  <Folder Name="/src/Services/" />
+  <Folder Name="/src/Services/IdentityService/">
+    <Project Path="ECommerce.Identity.API/ECommerce.Identity.API.csproj" />
+    <Project Path="ECommerce.Identity.Application/ECommerce.Identity.Application.csproj" />
+    <Project Path="ECommerce.Identity.Domain/ECommerce.Identity.Domain.csproj" />
+    <Project Path="ECommerce.Identity.Infrastructure/ECommerce.Identity.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Shared/">
+    <Project Path="ECommerce.Shared.Common/ECommerce.Shared.Common.csproj" />
+    <Project Path="ECommerce.Shared.Contracts/ECommerce.Shared.Contracts.csproj" />
+    <Project Path="ECommerce.Shared.RabbitMQ/ECommerce.Shared.RabbitMQ.csproj" />
+  </Folder>
+</Solution>
