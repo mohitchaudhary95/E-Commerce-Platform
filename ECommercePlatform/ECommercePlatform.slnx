@@ -4,11 +4,23 @@
     <Project Path="ECommerce.Gateway/ECommerce.Gateway.csproj" Id="a6bd1a37-6016-4095-b320-300598633091" />
   </Folder>
   <Folder Name="/src/Services/" />
+  <Folder Name="/src/Services/CartService/">
+    <Project Path="ECommerce.Cart.API/ECommerce.Cart.API.csproj" Id="1c2b2258-8a72-441c-9b40-9b712df9d979" />
+    <Project Path="ECommerce.Cart.Application/ECommerce.Cart.Application.csproj" Id="5a835284-43e6-42e5-a0cd-6acb1b5ccadb" />
+    <Project Path="ECommerce.Cart.Domain/ECommerce.Cart.Domain.csproj" Id="520f3891-c4ba-4f31-8314-5a4911d1e9fa" />
+    <Project Path="ECommerce.Cart.Infrastructure/ECommerce.Cart.Infrastructure.csproj" Id="57ca6549-2622-4b38-901d-40b940bafde5" />
+  </Folder>
   <Folder Name="/src/Services/IdentityService/">
     <Project Path="ECommerce.Identity.API/ECommerce.Identity.API.csproj" />
     <Project Path="ECommerce.Identity.Application/ECommerce.Identity.Application.csproj" />
     <Project Path="ECommerce.Identity.Domain/ECommerce.Identity.Domain.csproj" />
     <Project Path="ECommerce.Identity.Infrastructure/ECommerce.Identity.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Services/ProductService/">
+    <Project Path="ECommerce.Product.API/ECommerce.Product.API.csproj" Id="7ecf6317-d6ab-4761-80ae-97aa859afe57" />
+    <Project Path="ECommerce.Product.Domain/ECommerce.Product.Domain.csproj" Id="b84aa7ee-0af1-4f65-81a0-2b2a604dae3a" />
+    <Project Path="ECommerce.Product.Infrastructure/ECommerce.Product.Infrastructure.csproj" Id="6e2fdc9c-3e54-43cb-b54e-de254d66105a" />
+    <Project Path="ECommerce.Product/ECommerce.Product.Application.csproj" Id="936ce288-57ec-429f-9a9c-dce143ebe34c" />
   </Folder>
   <Folder Name="/src/Shared/">
     <Project Path="ECommerce.Shared.Common/ECommerce.Shared.Common.csproj" />
