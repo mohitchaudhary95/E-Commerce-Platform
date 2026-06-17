@@ -85,7 +85,7 @@ public class AddToCartCommandHandler : IRequestHandler<AddToCartCommand, CartDto
         return MapToDto(cart);
     }
 
-    private static CartDto MapToDto(Cart cart) => new()
+    private static CartDto MapToDto(ECommerce.Cart.Domain.Entities.Cart cart) => new()
     {
         Id = cart.Id,
         UserId = cart.UserId,

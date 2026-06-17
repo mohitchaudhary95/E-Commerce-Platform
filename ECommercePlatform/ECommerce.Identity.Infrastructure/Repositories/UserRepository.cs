@@ -3,11 +3,11 @@ using ECommerce.Identity.Infrastructure.Persistence;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using static ECommerce.Identity.Application.Interfaces.IIdentityInterfaces;
+using ECommerce.Identity.Application.Interfaces;
 
 namespace ECommerce.Identity.Infrastructure.Repositories
 {
-        public class UserRepository : IUserRepository
+        public class UserRepository : IIdentityInterfaces.IUserRepository
         {
             private readonly IdentityDbContext _context;
 
@@ -47,7 +47,7 @@ namespace ECommerce.Identity.Infrastructure.Repositories
             }
         }
 
-        public class RefreshTokenRepository : IRefreshTokenRepository
+        public class RefreshTokenRepository : IIdentityInterfaces.IRefreshTokenRepository
         {
             private readonly IdentityDbContext _context;
 

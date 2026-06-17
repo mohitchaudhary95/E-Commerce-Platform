@@ -132,7 +132,7 @@ public class GetUserCartQueryHandler : IRequestHandler<GetUserCartQuery, CartDto
 
 file static class CartMapper
 {
-    public static CartDto MapToDto(Cart cart) => new()
+    public static CartDto MapToDto(ECommerce.Cart.Domain.Entities.Cart cart) => new()
     {
         Id = cart.Id,
         UserId = cart.UserId,

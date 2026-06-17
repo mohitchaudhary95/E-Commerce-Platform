@@ -7,11 +7,11 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using static ECommerce.Identity.Application.Interfaces.IIdentityInterfaces;
+using ECommerce.Identity.Application.Interfaces;
 
 namespace ECommerce.Identity.Infrastructure.Services
 {
-    public class TokenService : ITokenService
+    public class TokenService : IIdentityInterfaces.ITokenService
     {
         private readonly IConfiguration _configuration;
 

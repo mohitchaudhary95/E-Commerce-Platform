@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using static ECommerce.Identity.Application.Interfaces.IIdentityInterfaces;
+using ECommerce.Identity.Application.Interfaces;
 
 namespace ECommerce.Identity.Infrastructure.Services
 {
-    public class PasswordHashService : IPasswordHashService
+    public class PasswordHashService : IIdentityInterfaces.IPasswordHashService
     {
         private const int WorkFactor = 12;
 

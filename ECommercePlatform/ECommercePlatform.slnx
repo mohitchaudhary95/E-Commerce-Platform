@@ -16,6 +16,29 @@
     <Project Path="ECommerce.Identity.Domain/ECommerce.Identity.Domain.csproj" />
     <Project Path="ECommerce.Identity.Infrastructure/ECommerce.Identity.Infrastructure.csproj" />
   </Folder>
+  <Folder Name="/src/Services/InventoryService/">
+    <Project Path="ECommerce.Inventory.API/ECommerce.Inventory.API.csproj" Id="07db1e4b-7d45-4c74-8196-200bc225d280" />
+    <Project Path="ECommerce.Inventory.Application/ECommerce.Inventory.Application.csproj" Id="70c06a98-c2e6-4bb6-837c-a432099abaf5" />
+    <Project Path="ECommerce.Inventory.Domain/ECommerce.Inventory.Domain.csproj" Id="c1ab223e-fc15-4934-a8c8-55edbec43239" />
+    <Project Path="ECommerce.Inventory.Infrastructure/ECommerce.Inventory.Infrastructure.csproj" Id="7f62f314-859e-4c17-93c7-234d3e78e84f" />
+  </Folder>
+  <Folder Name="/src/Services/NotificationService/">
+    <Project Path="ECommerce.Notification.API/ECommerce.Notification.API.csproj" Id="7aeee18c-56bb-4ac7-b5aa-991774393ce4" />
+    <Project Path="ECommerce.Notification.Application/ECommerce.Notification.Application.csproj" Id="7729814f-57d3-4a45-b7ff-0da50f7d89b6" />
+    <Project Path="ECommerce.Notification.Infrastructure/ECommerce.Notification.Infrastructure.csproj" Id="420b3020-2613-4b4b-8575-448ac2d1535c" />
+  </Folder>
+  <Folder Name="/src/Services/OrderService/">
+    <Project Path="ECommerce.Order.API/ECommerce.Order.API.csproj" Id="d4cd91c3-36a1-4486-bf9c-48f5960a30b3" />
+    <Project Path="ECommerce.Order.Application/ECommerce.Order.Application.csproj" Id="8023dad9-b629-41c5-8ef4-f5e65caae209" />
+    <Project Path="ECommerce.Order.Domain/ECommerce.Order.Domain.csproj" Id="65f9ac3b-b80b-4a39-9a73-179bdaf3716c" />
+    <Project Path="ECommerce.Order.Infrastructure/ECommerce.Order.Infrastructure.csproj" Id="534a04ec-c2c9-4a1f-a9f0-9c1b38321a4f" />
+  </Folder>
+  <Folder Name="/src/Services/PaymentService/">
+    <Project Path="ECommerce.Payment.API/ECommerce.Payment.API.csproj" Id="abbb7de8-c3b5-47d0-b585-f0802e5fb6d1" />
+    <Project Path="ECommerce.Payment.Application/ECommerce.Payment.Application.csproj" Id="55662821-43fd-4c4f-94d2-d3c8c8b42b84" />
+    <Project Path="ECommerce.Payment.Domain/ECommerce.Payment.Domain.csproj" Id="52d9ab07-d3e5-42db-b397-cf5777b0c936" />
+    <Project Path="ECommerce.Payment.Infrastructure/ECommerce.Payment.Infrastructure.csproj" Id="be827d28-1408-41ef-bc90-14ac5d6d32ef" />
+  </Folder>
   <Folder Name="/src/Services/ProductService/">
     <Project Path="ECommerce.Product.API/ECommerce.Product.API.csproj" Id="7ecf6317-d6ab-4761-80ae-97aa859afe57" />
     <Project Path="ECommerce.Product.Domain/ECommerce.Product.Domain.csproj" Id="b84aa7ee-0af1-4f65-81a0-2b2a604dae3a" />

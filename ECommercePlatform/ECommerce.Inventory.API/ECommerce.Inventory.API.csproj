@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ECommerce.Inventory.Application\ECommerce.Inventory.Application.csproj" />
+    <ProjectReference Include="..\ECommerce.Inventory.Infrastructure\ECommerce.Inventory.Infrastructure.csproj" />
+    <ProjectReference Include="..\ECommerce.Shared.Common\ECommerce.Shared.Common.csproj" />
+  </ItemGroup>
+
+</Project>
