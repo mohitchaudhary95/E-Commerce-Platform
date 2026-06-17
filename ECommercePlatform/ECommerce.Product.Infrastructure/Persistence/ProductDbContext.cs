@@ -1,4 +1,6 @@
-﻿using ECommerce.Product.Domain.Entities;
+using DomainProduct = global::ECommerce.Product.Domain.Entities.Product;
+using DomainCategory = global::ECommerce.Product.Domain.Entities.Category;
+using ECommerce.Product.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -11,7 +13,7 @@ namespace ECommerce.Product.Infrastructure.Persistence
         public ProductDbContext(DbContextOptions<ProductDbContext> options) : base(options) { }
 
         public DbSet<Domain.Entities.Product> Products => Set<Domain.Entities.Product>();
-        public DbSet<Category> Categories => Set<Category>();
+        public DbSet<DomainCategory> Categories => Set<DomainCategory>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -20,3 +22,4 @@ namespace ECommerce.Product.Infrastructure.Persistence
         }
     }
 }
+

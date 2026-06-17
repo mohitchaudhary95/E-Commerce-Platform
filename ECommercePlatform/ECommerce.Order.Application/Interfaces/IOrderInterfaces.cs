@@ -1,3 +1,4 @@
+using DomainOrder = ECommerce.Order.Domain.Entities.Order;
 using ECommerce.Order.Domain.Entities;
 using ECommerce.Order.Domain.Enums;
 using ECommerce.Shared.Common.Responses;
@@ -6,10 +7,10 @@ namespace ECommerce.Order.Application.Interfaces;
 
 public interface IOrderRepository
 {
-    Task<Order?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
-    Task<PagedResult<Order>> GetByUserIdAsync(Guid userId, int pageNumber, int pageSize, CancellationToken cancellationToken = default);
-    Task AddAsync(Order order, CancellationToken cancellationToken = default);
-    Task UpdateAsync(Order order, CancellationToken cancellationToken = default);
+    Task<DomainOrder?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<PagedResult<DomainOrder>> GetByUserIdAsync(Guid userId, int pageNumber, int pageSize, CancellationToken cancellationToken = default);
+    Task AddAsync(DomainOrder order, CancellationToken cancellationToken = default);
+    Task UpdateAsync(DomainOrder order, CancellationToken cancellationToken = default);
 }
 
 /// <summary>
@@ -19,5 +20,6 @@ public interface IOrderRepository
 /// </summary>
 public interface IOrderEventPublisher
 {
-    Task PublishOrderCreatedAsync(Order order, CancellationToken cancellationToken = default);
+    Task PublishOrderCreatedAsync(DomainOrder order, CancellationToken cancellationToken = default);
 }
+

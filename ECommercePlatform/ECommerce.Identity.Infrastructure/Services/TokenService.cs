@@ -1,4 +1,4 @@
-﻿using ECommerce.Identity.Domain.Entities;
+using ECommerce.Identity.Domain.Entities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -53,7 +53,7 @@ namespace ECommerce.Identity.Infrastructure.Services
 
         /// <summary>
         /// Generates a cryptographically secure random string for use as a refresh token.
-        /// This is NOT a JWT — just a random opaque string stored in the DB.
+        /// This is NOT a JWT � just a random opaque string stored in the DB.
         /// </summary>
         public string GenerateRefreshToken()
         {

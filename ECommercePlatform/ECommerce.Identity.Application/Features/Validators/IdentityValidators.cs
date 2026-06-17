@@ -1,4 +1,4 @@
-﻿using ECommerce.Identity.Application.Features.Commands;
+using ECommerce.Identity.Application.Features.Commands;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
@@ -30,7 +30,7 @@ namespace ECommerce.Identity.Application.Features.Validators
                     .Matches("[A-Z]").WithMessage("Password must contain at least one uppercase letter.")
                     .Matches("[0-9]").WithMessage("Password must contain at least one number.");
 
-                // Cross-field validation — confirm password must match
+                // Cross-field validation � confirm password must match
                 RuleFor(x => x.Dto.ConfirmPassword)
                     .Equal(x => x.Dto.Password).WithMessage("Passwords do not match.");
             }

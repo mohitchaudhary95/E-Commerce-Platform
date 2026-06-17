@@ -32,7 +32,7 @@ public class RemoveCartItemCommandHandler : IRequestHandler<RemoveCartItemComman
 
         await _cartRepository.UpdateAsync(cart, cancellationToken);
 
-        return MapToDto(cart);
+        return CartMapper.MapToDto(cart);
     }
 }
 
@@ -68,7 +68,7 @@ public class UpdateQuantityCommandHandler : IRequestHandler<UpdateQuantityComman
         cart.UpdatedAt = DateTime.UtcNow;
         await _cartRepository.UpdateAsync(cart, cancellationToken);
 
-        return MapToDto(cart);
+        return CartMapper.MapToDto(cart);
     }
 }
 
@@ -124,7 +124,7 @@ public class GetUserCartQueryHandler : IRequestHandler<GetUserCartQuery, CartDto
             };
         }
 
-        return MapToDto(cart);
+        return CartMapper.MapToDto(cart);
     }
 }
 
@@ -151,3 +151,4 @@ file static class CartMapper
         }).ToList()
     };
 }
+

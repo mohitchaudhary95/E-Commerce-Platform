@@ -1,6 +1,8 @@
 using ECommerce.Cart.Application.DTOs;
 using ECommerce.Cart.Domain.Entities;
 
+using DomainCart = ECommerce.Cart.Domain.Entities.Cart;
+
 namespace ECommerce.Cart.Application.Interfaces;
 
 /// <summary>
@@ -9,11 +11,11 @@ namespace ECommerce.Cart.Application.Interfaces;
 /// </summary>
 public interface ICartRepository
 {
-    Task<Cart?> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken = default);
-    Task<Cart?> GetByIdAsync(Guid cartId, CancellationToken cancellationToken = default);
-    Task AddAsync(Cart cart, CancellationToken cancellationToken = default);
-    Task UpdateAsync(Cart cart, CancellationToken cancellationToken = default);
-    Task DeleteAsync(Cart cart, CancellationToken cancellationToken = default);
+    Task<DomainCart?> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken = default);
+    Task<DomainCart?> GetByIdAsync(Guid cartId, CancellationToken cancellationToken = default);
+    Task AddAsync(DomainCart cart, CancellationToken cancellationToken = default);
+    Task UpdateAsync(DomainCart cart, CancellationToken cancellationToken = default);
+    Task DeleteAsync(DomainCart cart, CancellationToken cancellationToken = default);
 }
 
 /// <summary>

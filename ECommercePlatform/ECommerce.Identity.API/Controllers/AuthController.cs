@@ -1,4 +1,4 @@
-ï»¿using ECommerce.Identity.Application.DTOs;
+using ECommerce.Identity.Application.DTOs;
 using ECommerce.Identity.Application.Features.Commands;
 using ECommerce.Shared.Common.Responses;
 using MediatR;
@@ -68,14 +68,14 @@ namespace ECommerce.Identity.API.Controllers
             [FromBody] ChangePasswordDto dto,
             CancellationToken cancellationToken)
         {
-            // Extract userId from JWT claims â€” set by the token when it was generated
+            // Extract userId from JWT claims — set by the token when it was generated
             var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             await _mediator.Send(new ChangePasswordCommand(userId, dto), cancellationToken);
             return Ok(ApiResponse.OkNoData("Password changed successfully."));
         }
 
         /// <summary>
-        /// Logout â€” revokes all refresh tokens for the current user.
+        /// Logout — revokes all refresh tokens for the current user.
         /// </summary>
         [HttpPost("logout")]
         [Authorize]

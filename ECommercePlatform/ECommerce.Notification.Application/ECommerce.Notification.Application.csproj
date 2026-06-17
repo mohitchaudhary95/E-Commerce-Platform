@@ -6,4 +6,14 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="14.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ECommerce.Notification.Domain\ECommerce.Notification.Domain.csproj" />
+    <ProjectReference Include="..\ECommerce.Shared.Common\ECommerce.Shared.Common.csproj" />
+    <ProjectReference Include="..\ECommerce.Shared.Contracts\ECommerce.Shared.Contracts.csproj" />
+  </ItemGroup>
+
 </Project>

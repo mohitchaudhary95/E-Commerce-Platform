@@ -14,6 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ECommerce.Cart.Domain\ECommerce.Cart.Domain.csproj" />
     <ProjectReference Include="..\ECommerce.Shared.Common\ECommerce.Shared.Common.csproj" />
+    <ProjectReference Include="..\ECommerce.Shared.Contracts\ECommerce.Shared.Contracts.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -17,7 +17,7 @@ namespace ECommerce.Identity.Domain.Entities
         public Guid UserId { get; set; }
         public User User { get; set; } = null!;
 
-        // Helper — check both conditions in one place
+        // Helper � check both conditions in one place
         public bool IsActive => !IsUsed && !IsRevoked && DateTime.UtcNow < ExpiresAt;
     }
 

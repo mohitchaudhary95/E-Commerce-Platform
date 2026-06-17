@@ -1,6 +1,7 @@
 using ECommerce.Payment.Application.DTOs;
 using ECommerce.Payment.Application.Features.Commands;
 using ECommerce.Payment.Application.Interfaces;
+using DomainPayment = ECommerce.Payment.Domain.Entities.Payment;
 using ECommerce.Payment.Domain.Entities;
 using ECommerce.Payment.Domain.Enums;
 using MediatR;
@@ -53,7 +54,7 @@ public class ProcessPaymentCommandHandler : IRequestHandler<ProcessPaymentComman
         }
 
         // ── Step 2: Create payment record ─────────────────────────────────────
-        var payment = new Payment
+        var payment = new DomainPayment
         {
             OrderId = dto.OrderId,
             UserId = dto.UserId,
@@ -108,7 +109,7 @@ public class ProcessPaymentCommandHandler : IRequestHandler<ProcessPaymentComman
         return (false, null, reasons[Random.Shared.Next(reasons.Length)]);
     }
 
-    private static PaymentDto MapToDto(Payment p) => new()
+    private static PaymentDto MapToDto(DomainPayment p) => new()
     {
         Id = p.Id,
         OrderId = p.OrderId,
@@ -121,3 +122,4 @@ public class ProcessPaymentCommandHandler : IRequestHandler<ProcessPaymentComman
         ProcessedAt = p.ProcessedAt
     };
 }
+

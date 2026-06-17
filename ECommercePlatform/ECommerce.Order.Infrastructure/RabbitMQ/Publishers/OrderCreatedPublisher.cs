@@ -1,4 +1,5 @@
 using ECommerce.Order.Application.Interfaces;
+using DomainOrder = ECommerce.Order.Domain.Entities.Order;
 using ECommerce.Order.Domain.Entities;
 using ECommerce.Shared.Contracts.Events;
 using ECommerce.Shared.RabbitMQ;
@@ -31,16 +32,16 @@ public class OrderCreatedPublisher : IOrderEventPublisher
         _logger = logger;
     }
 
-    public async Task PublishOrderCreatedAsync(Order order, CancellationToken cancellationToken = default)
+    public async Task PublishOrderCreatedAsync(DomainOrder order, CancellationToken cancellationToken = default)
     {
-        var @event = new OrderCreatedEvent
+        var @event = new DomainOrderCreatedEvent
         {
             OrderId = order.Id,
             UserId = order.UserId,
             UserEmail = order.UserEmail,
             TotalAmount = order.TotalAmount,
             CreatedAt = order.CreatedAt,
-            Items = order.Items.Select(i => new OrderCreatedItem
+            Items = order.Items.Select(i => new DomainOrderCreatedItem
             {
                 ProductId = i.ProductId,
                 ProductName = i.ProductName,
@@ -56,3 +57,4 @@ public class OrderCreatedPublisher : IOrderEventPublisher
             order.Id, order.Items.Count, order.TotalAmount);
     }
 }
+

@@ -1,11 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace ECommerce.Shared.Common.Exceptions
 {
-    public class DomainExceptions
-    {
+
         public class NotFoundException : Exception
         {
             public NotFoundException(string entityName, object id)
@@ -54,5 +53,4 @@ namespace ECommerce.Shared.Common.Exceptions
             {
             }
         }
-    }
 }

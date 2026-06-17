@@ -1,3 +1,5 @@
+using Microsoft.OpenApi.Models;
+using ECommerce.Identity.Application.Features.Validators;
 using System.Text;
 using ECommerce.Identity.Application.Features.Commands;
 using ECommerce.Identity.Infrastructure.Persistence;
@@ -151,3 +153,5 @@ namespace ECommerce.Identity.API
         }
     }
 }
+
+

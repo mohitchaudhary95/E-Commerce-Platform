@@ -1,5 +1,5 @@
 using ECommerce.Order.Application.Interfaces;
-using ECommerce.Order.Domain.Entities;
+using DomainOrder = ECommerce.Order.Domain.Entities.Order;
 using ECommerce.Order.Infrastructure.Persistence;
 using ECommerce.Shared.Common.Responses;
 using Microsoft.EntityFrameworkCore;
@@ -15,12 +15,12 @@ public class OrderRepository : IOrderRepository
         _context = context;
     }
 
-    public async Task<Order?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<DomainOrder?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         => await _context.Orders
             .Include(o => o.Items)
             .FirstOrDefaultAsync(o => o.Id == id, cancellationToken);
 
-    public async Task<PagedResult<Order>> GetByUserIdAsync(
+    public async Task<PagedResult<DomainOrder>> GetByUserIdAsync(
         Guid userId, int pageNumber, int pageSize, CancellationToken cancellationToken = default)
     {
         var query = _context.Orders
@@ -35,16 +35,16 @@ public class OrderRepository : IOrderRepository
             .Take(pageSize)
             .ToListAsync(cancellationToken);
 
-        return PagedResult<Order>.Create(items, totalCount, pageNumber, pageSize);
+        return PagedResult<DomainOrder>.Create(items, totalCount, pageNumber, pageSize);
     }
 
-    public async Task AddAsync(Order order, CancellationToken cancellationToken = default)
+    public async Task AddAsync(DomainOrder order, CancellationToken cancellationToken = default)
     {
         await _context.Orders.AddAsync(order, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task UpdateAsync(Order order, CancellationToken cancellationToken = default)
+    public async Task UpdateAsync(DomainOrder order, CancellationToken cancellationToken = default)
     {
         _context.Orders.Update(order);
         await _context.SaveChangesAsync(cancellationToken);

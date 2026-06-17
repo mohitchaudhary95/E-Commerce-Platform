@@ -1,4 +1,4 @@
-ï»¿using ECommerce.Product.Application.DTOs;
+using ECommerce.Product.Application.DTOs;
 using ECommerce.Product.Application.Features.Commands;
 using ECommerce.Product.Application.Features.Queries;
 using ECommerce.Shared.Common.Responses;
@@ -62,7 +62,7 @@ namespace ECommerce.Product.API.Controllers
 
         /// <summary>
         /// Update an existing product. Admin only.
-        /// Partial update â€” only sends the fields that changed.
+        /// Partial update — only sends the fields that changed.
         /// </summary>
         [HttpPut("{id:guid}")]
         [Authorize(Roles = "Admin")]
@@ -77,7 +77,7 @@ namespace ECommerce.Product.API.Controllers
 
         /// <summary>
         /// Soft-delete a product. Admin only.
-        /// Sets IsActive = false â€” product still exists in DB for historical orders.
+        /// Sets IsActive = false — product still exists in DB for historical orders.
         /// </summary>
         [HttpDelete("{id:guid}")]
         [Authorize(Roles = "Admin")]

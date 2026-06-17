@@ -1,3 +1,4 @@
+using DomainOrder = ECommerce.Order.Domain.Entities.Order;
 using ECommerce.Order.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,7 +8,7 @@ public class OrderDbContext : DbContext
 {
     public OrderDbContext(DbContextOptions<OrderDbContext> options) : base(options) { }
 
-    public DbSet<Order> Orders => Set<Order>();
+    public DbSet<DomainOrder> Orders => Set<DomainOrder>();
     public DbSet<OrderItem> OrderItems => Set<OrderItem>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -16,3 +17,4 @@ public class OrderDbContext : DbContext
         base.OnModelCreating(modelBuilder);
     }
 }
+

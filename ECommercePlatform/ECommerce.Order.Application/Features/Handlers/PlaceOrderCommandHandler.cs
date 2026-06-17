@@ -1,6 +1,7 @@
 using ECommerce.Order.Application.DTOs;
 using ECommerce.Order.Application.Features.Commands;
 using ECommerce.Order.Application.Interfaces;
+using DomainOrder = ECommerce.Order.Domain.Entities.Order;
 using ECommerce.Order.Domain.Entities;
 using ECommerce.Shared.Common.Exceptions;
 using MediatR;
@@ -44,12 +45,12 @@ public class PlaceOrderCommandHandler : IRequestHandler<PlaceOrderCommand, Order
             throw new BusinessRuleException("Shipping address is required.");
 
         // ── Step 2: Build Order entity ────────────────────────────────────────
-        var order = new Order
+        var order = new DomainOrder
         {
             UserId = request.UserId,
             UserEmail = request.Dto.UserEmail,
             ShippingAddress = request.Dto.ShippingAddress,
-            Items = request.Dto.Items.Select(i => new OrderItem
+            Items = request.Dto.Items.Select(i => new DomainOrderItem
             {
                 ProductId = i.ProductId,
                 ProductName = i.ProductName,
@@ -72,7 +73,7 @@ public class PlaceOrderCommandHandler : IRequestHandler<PlaceOrderCommand, Order
         return MapToDto(order);
     }
 
-    private static OrderDto MapToDto(Order o) => new()
+    private static OrderDto MapToDto(DomainOrder o) => new()
     {
         Id = o.Id,
         UserId = o.UserId,
@@ -93,3 +94,5 @@ public class PlaceOrderCommandHandler : IRequestHandler<PlaceOrderCommand, Order
         }).ToList()
     };
 }
+
+

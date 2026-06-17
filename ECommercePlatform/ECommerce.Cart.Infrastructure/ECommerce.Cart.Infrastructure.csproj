@@ -7,12 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.8" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ECommerce.Cart.Application\ECommerce.Cart.Application.csproj" />
     <ProjectReference Include="..\ECommerce.Cart.Domain\ECommerce.Cart.Domain.csproj" />
+    <ProjectReference Include="..\ECommerce.Shared.RabbitMQ\ECommerce.Shared.RabbitMQ.csproj" />
+    <ProjectReference Include="..\ECommerce.Shared.Common\ECommerce.Shared.Common.csproj" />
   </ItemGroup>
 
 </Project>

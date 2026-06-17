@@ -1,4 +1,7 @@
-﻿using ECommerce.Product.Application.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using ECommerce.Product.Application.Interfaces;
+using DomainProduct = global::ECommerce.Product.Domain.Entities.Product;
+using DomainCategory = global::ECommerce.Product.Domain.Entities.Category;
 using ECommerce.Product.Domain.Entities;
 using ECommerce.Product.Infrastructure.Persistence;
 using System;
@@ -16,12 +19,12 @@ namespace ECommerce.Product.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<Category?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+        public async Task<DomainCategory?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
             => await _context.Categories
                 .Include(c => c.Products) // Include products to calculate ProductCount
                 .FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
 
-        public async Task<List<Category>> GetAllAsync(CancellationToken cancellationToken = default)
+        public async Task<List<DomainCategory>> GetAllAsync(CancellationToken cancellationToken = default)
             => await _context.Categories
                 .Include(c => c.Products)
                 .Where(c => c.IsActive)
@@ -31,16 +34,18 @@ namespace ECommerce.Product.Infrastructure.Repositories
         public async Task<bool> NameExistsAsync(string name, CancellationToken cancellationToken = default)
             => await _context.Categories.AnyAsync(c => c.Name == name, cancellationToken);
 
-        public async Task AddAsync(Category category, CancellationToken cancellationToken = default)
+        public async Task AddAsync(DomainCategory category, CancellationToken cancellationToken = default)
         {
             await _context.Categories.AddAsync(category, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task UpdateAsync(Category category, CancellationToken cancellationToken = default)
+        public async Task UpdateAsync(DomainCategory category, CancellationToken cancellationToken = default)
         {
             _context.Categories.Update(category);
             await _context.SaveChangesAsync(cancellationToken);
         }
     }
 }
+
+

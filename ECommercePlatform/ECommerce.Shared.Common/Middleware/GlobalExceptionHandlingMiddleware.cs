@@ -1,4 +1,4 @@
-﻿using ECommerce.Shared.Common.Exceptions;
+using ECommerce.Shared.Common.Exceptions;
 using ECommerce.Shared.Common.Responses;
 using System;
 using System.Collections.Generic;
@@ -48,7 +48,7 @@ namespace ECommerce.Shared.Common.Middleware
                 InsufficientStockException ex => (HttpStatusCode.BadRequest, ex.Message, new List<string>()),
                 UnauthorizedAccessException => (HttpStatusCode.Unauthorized, "Unauthorized access.", new List<string>()),
 
-                // Catch-all — never expose internal details to the client
+                // Catch-all � never expose internal details to the client
                 _ => (HttpStatusCode.InternalServerError, "An unexpected error occurred.", new List<string>())
             };
 

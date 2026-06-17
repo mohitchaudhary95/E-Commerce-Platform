@@ -1,4 +1,4 @@
-ï»¿using ECommerce.Identity.Domain.Entities;
+using ECommerce.Identity.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
@@ -28,14 +28,14 @@ namespace ECommerce.Identity.Infrastructure.Persistence.Configurations
                     .IsRequired()
                     .HasMaxLength(100);
 
-                // Unique index on Email â€” prevents duplicate registrations at the DB level
+                // Unique index on Email — prevents duplicate registrations at the DB level
                 builder.HasIndex(u => u.Email)
                     .IsUnique();
 
                 builder.Property(u => u.PasswordHash)
                     .IsRequired();
 
-                // Store enum as string ("Customer", "Admin") â€” readable in SQL queries
+                // Store enum as string ("Customer", "Admin") — readable in SQL queries
                 builder.Property(u => u.Role)
                     .HasConversion<string>()
                     .HasMaxLength(20);
@@ -49,7 +49,7 @@ namespace ECommerce.Identity.Infrastructure.Persistence.Configurations
                     .HasForeignKey(rt => rt.UserId)
                     .OnDelete(DeleteBehavior.Cascade); // Delete tokens when user is deleted
 
-                // Ignore computed property â€” not a DB column
+                // Ignore computed property — not a DB column
                 builder.Ignore(u => u.FullName);
             }
         }
@@ -71,7 +71,7 @@ namespace ECommerce.Identity.Infrastructure.Persistence.Configurations
                 builder.Property(rt => rt.ExpiresAt).IsRequired();
                 builder.Property(rt => rt.CreatedAt).IsRequired();
 
-                // Ignore computed property â€” derived from other fields
+                // Ignore computed property — derived from other fields
                 builder.Ignore(rt => rt.IsActive);
             }
         }

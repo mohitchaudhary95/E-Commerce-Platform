@@ -1,4 +1,6 @@
+using ECommerce.Shared.RabbitMQ.Abstractions;
 using ECommerce.Payment.Application.Interfaces;
+using DomainPayment = ECommerce.Payment.Domain.Entities.Payment;
 using ECommerce.Payment.Domain.Entities;
 using ECommerce.Payment.Domain.Enums;
 using ECommerce.Shared.Contracts.Events;
@@ -19,7 +21,7 @@ public class PaymentCompletedPublisher : IPaymentEventPublisher
         _logger = logger;
     }
 
-    public async Task PublishPaymentCompletedAsync(Payment payment, CancellationToken cancellationToken = default)
+    public async Task PublishPaymentCompletedAsync(DomainPayment payment, CancellationToken cancellationToken = default)
     {
         var @event = new PaymentCompletedEvent
         {
@@ -40,3 +42,7 @@ public class PaymentCompletedPublisher : IPaymentEventPublisher
             payment.OrderId, @event.IsSuccess);
     }
 }
+
+
+
+

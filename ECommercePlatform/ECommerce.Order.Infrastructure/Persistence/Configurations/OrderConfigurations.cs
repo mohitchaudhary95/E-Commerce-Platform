@@ -1,3 +1,4 @@
+using DomainOrder = ECommerce.Order.Domain.Entities.Order;
 using ECommerce.Order.Domain.Entities;
 using ECommerce.Order.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
@@ -5,9 +6,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ECommerce.Order.Infrastructure.Persistence.Configurations;
 
-public class OrderConfiguration : IEntityTypeConfiguration<Order>
+public class OrderConfiguration : IEntityTypeConfiguration<DomainOrder>
 {
-    public void Configure(EntityTypeBuilder<Order> builder)
+    public void Configure(EntityTypeBuilder<DomainOrder> builder)
     {
         builder.ToTable("Orders");
         builder.HasKey(o => o.Id);
@@ -66,3 +67,4 @@ public class OrderItemConfiguration : IEntityTypeConfiguration<OrderItem>
         builder.Ignore(i => i.TotalPrice);
     }
 }
+

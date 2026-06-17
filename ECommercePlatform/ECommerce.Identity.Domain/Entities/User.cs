@@ -1,4 +1,4 @@
-ï»¿using ECommerce.Identity.Domain.Enums;
+using ECommerce.Identity.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -17,10 +17,10 @@ namespace ECommerce.Identity.Domain.Entities
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; }
 
-        // Navigation property â€” EF Core loads related refresh tokens
+        // Navigation property — EF Core loads related refresh tokens
         public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
 
-        // Computed â€” no need to store this separately
+        // Computed — no need to store this separately
         public string FullName => $"{FirstName} {LastName}";
     }
 

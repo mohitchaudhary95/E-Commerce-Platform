@@ -1,4 +1,6 @@
+using ECommerce.Shared.RabbitMQ.Abstractions;
 using ECommerce.Inventory.Application.Interfaces;
+using DomainInventory = ECommerce.Inventory.Domain.Entities.Inventory;
 using ECommerce.Inventory.Domain.Entities;
 using ECommerce.Shared.Contracts.Events;
 using ECommerce.Shared.RabbitMQ;
@@ -21,7 +23,7 @@ public class InventoryUpdatedPublisher : IInventoryEventPublisher
     public async Task PublishInventoryUpdatedAsync(
         Inventory inventory, string reason, CancellationToken cancellationToken = default)
     {
-        var @event = new InventoryUpdatedEvent
+        var @event = new DomainInventoryUpdatedEvent
         {
             ProductId = inventory.ProductId,
             ProductName = inventory.ProductName,
@@ -37,3 +39,7 @@ public class InventoryUpdatedPublisher : IInventoryEventPublisher
             inventory.ProductId, inventory.StockQuantity, reason);
     }
 }
+
+
+
+

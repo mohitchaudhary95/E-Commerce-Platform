@@ -1,5 +1,6 @@
 using ECommerce.Product.Application.DTOs;
-using ECommerce.Product.Domain.Entities;
+using DomainProduct = global::ECommerce.Product.Domain.Entities.Product;
+using global::ECommerce.Product.Domain.Entities;
 using ECommerce.Shared.Common.Responses;
 
 namespace ECommerce.Product.Application.Interfaces;
@@ -11,13 +12,13 @@ namespace ECommerce.Product.Application.Interfaces;
 /// </summary>
 public interface IProductRepository
 {
-    Task<Product?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
-    Task<PagedResult<Product>> GetPagedAsync(ProductFilterDto filter, CancellationToken cancellationToken = default);
-    Task<List<Product>> GetByCategoryAsync(Guid categoryId, CancellationToken cancellationToken = default);
+    Task<DomainProduct?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<PagedResult<DomainProduct>> GetPagedAsync(ProductFilterDto filter, CancellationToken cancellationToken = default);
+    Task<List<DomainProduct>> GetByCategoryAsync(Guid categoryId, CancellationToken cancellationToken = default);
     Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken = default);
-    Task AddAsync(Product product, CancellationToken cancellationToken = default);
-    Task UpdateAsync(Product product, CancellationToken cancellationToken = default);
-    Task DeleteAsync(Product product, CancellationToken cancellationToken = default);
+    Task AddAsync(DomainProduct product, CancellationToken cancellationToken = default);
+    Task UpdateAsync(DomainProduct product, CancellationToken cancellationToken = default);
+    Task DeleteAsync(DomainProduct product, CancellationToken cancellationToken = default);
 }
 
 /// <summary>
@@ -31,3 +32,4 @@ public interface ICategoryRepository
     Task AddAsync(Category category, CancellationToken cancellationToken = default);
     Task UpdateAsync(Category category, CancellationToken cancellationToken = default);
 }
+

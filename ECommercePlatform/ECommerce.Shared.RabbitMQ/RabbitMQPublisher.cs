@@ -1,6 +1,6 @@
-﻿using ECommerce.Shared.RabbitMQ.Abstractions;
+using ECommerce.Shared.RabbitMQ.Abstractions;
 using ECommerce.Shared.RabbitMQ.Settings;
-using Microsoft.EntityFrameworkCore.Metadata;
+
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
@@ -11,7 +11,7 @@ using System.Text.Json;
 
 namespace ECommerce.Shared.RabbitMQ
 {
-    public class RabbitMQPublisher : IEventInterfaces, IDisposable
+    public class RabbitMQPublisher : IEventPublisher, IDisposable
     {
         private readonly IConnection _connection;
         private readonly IModel _channel;
@@ -34,7 +34,7 @@ namespace ECommerce.Shared.RabbitMQ
                 NetworkRecoveryInterval = TimeSpan.FromSeconds(10)
             };
 
-            using var _ = _connection = (IConnection)factory.CreateConnectionAsync();
+            _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();
 
             _logger.LogInformation("RabbitMQ connection established: {Host}:{Port}", settings.Value.Host, settings.Value.Port);

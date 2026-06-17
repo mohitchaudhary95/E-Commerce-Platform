@@ -12,13 +12,15 @@
 
   <ItemGroup>
     <PackageReference Include="BCrypt.Net-Next" Version="4.2.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.8" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.19.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ECommerce.Identity.Application\ECommerce.Identity.Application.csproj" />
     <ProjectReference Include="..\ECommerce.Identity.Domain\ECommerce.Identity.Domain.csproj" />
+    <ProjectReference Include="..\ECommerce.Shared.RabbitMQ\ECommerce.Shared.RabbitMQ.csproj" />
+    <ProjectReference Include="..\ECommerce.Shared.Common\ECommerce.Shared.Common.csproj" />
   </ItemGroup>
 
 </Project>

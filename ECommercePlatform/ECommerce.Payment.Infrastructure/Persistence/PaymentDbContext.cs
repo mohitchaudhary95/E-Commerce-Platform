@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using DomainPayment = ECommerce.Payment.Domain.Entities.Payment;
 using ECommerce.Payment.Domain.Entities;
 using ECommerce.Payment.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +12,7 @@ public class PaymentDbContext : DbContext
 {
     public PaymentDbContext(DbContextOptions<PaymentDbContext> options) : base(options) { }
 
-    public DbSet<Payment> Payments => Set<Payment>();
+    public DbSet<DomainPayment> Payments => Set<DomainPayment>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -18,9 +21,9 @@ public class PaymentDbContext : DbContext
     }
 }
 
-public class PaymentConfiguration : IEntityTypeConfiguration<Payment>
+public class PaymentConfiguration : IEntityTypeConfiguration<DomainPayment>
 {
-    public void Configure(EntityTypeBuilder<Payment> builder)
+    public void Configure(EntityTypeBuilder<DomainPayment> builder)
     {
         builder.ToTable("Payments");
         builder.HasKey(p => p.Id);
@@ -51,3 +54,6 @@ public class PaymentConfiguration : IEntityTypeConfiguration<Payment>
         builder.HasIndex(p => p.UserId);
     }
 }
+
+
+

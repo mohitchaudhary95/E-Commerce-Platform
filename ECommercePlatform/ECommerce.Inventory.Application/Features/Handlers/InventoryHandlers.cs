@@ -2,7 +2,7 @@ using ECommerce.Inventory.Application.DTOs;
 using ECommerce.Inventory.Application.Features.Commands;
 using ECommerce.Inventory.Application.Features.Queries;
 using ECommerce.Inventory.Application.Interfaces;
-using ECommerce.Inventory.Domain.Entities;
+using DomainInventory = ECommerce.Inventory.Domain.Entities.Inventory;
 using ECommerce.Shared.Common.Exceptions;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -34,11 +34,11 @@ public class SetStockCommandHandler : IRequestHandler<SetStockCommand, Inventory
             existing.UpdatedAt = DateTime.UtcNow;
             await _inventoryRepository.UpdateAsync(existing, cancellationToken);
             await _eventPublisher.PublishInventoryUpdatedAsync(existing, "ManualSet", cancellationToken);
-            return MapToDto(existing);
+            return InventoryMapper.MapToDto(existing);
         }
 
         // Create new inventory record for this product
-        var inventory = new Inventory
+        var inventory = new DomainInventory
         {
             ProductId = request.Dto.ProductId,
             ProductName = request.Dto.ProductName,
@@ -47,7 +47,7 @@ public class SetStockCommandHandler : IRequestHandler<SetStockCommand, Inventory
         };
 
         await _inventoryRepository.AddAsync(inventory, cancellationToken);
-        return MapToDto(inventory);
+        return InventoryMapper.MapToDto(inventory);
     }
 }
 
@@ -81,7 +81,7 @@ public class AdjustStockCommandHandler : IRequestHandler<AdjustStockCommand, Inv
         await _inventoryRepository.UpdateAsync(inventory, cancellationToken);
         await _eventPublisher.PublishInventoryUpdatedAsync(inventory, request.Dto.Reason, cancellationToken);
 
-        return MapToDto(inventory);
+        return InventoryMapper.MapToDto(inventory);
     }
 }
 
@@ -168,7 +168,7 @@ public class GetStockByProductIdQueryHandler : IRequestHandler<GetStockByProduct
         var inventory = await _inventoryRepository.GetByProductIdAsync(request.ProductId, cancellationToken)
             ?? throw new NotFoundException("Inventory for product", request.ProductId);
 
-        return MapToDto(inventory);
+        return InventoryMapper.MapToDto(inventory);
     }
 }
 
@@ -184,7 +184,7 @@ public class GetAllInventoryQueryHandler : IRequestHandler<GetAllInventoryQuery,
     public async Task<List<InventoryDto>> Handle(GetAllInventoryQuery request, CancellationToken cancellationToken)
     {
         var items = await _inventoryRepository.GetAllAsync(cancellationToken);
-        return items.Select(MapToDto).ToList();
+        return items.Select(InventoryMapper.MapToDto).ToList();
     }
 }
 
@@ -200,7 +200,7 @@ public class GetLowStockQueryHandler : IRequestHandler<GetLowStockQuery, List<In
     public async Task<List<InventoryDto>> Handle(GetLowStockQuery request, CancellationToken cancellationToken)
     {
         var items = await _inventoryRepository.GetLowStockAsync(cancellationToken);
-        return items.Select(MapToDto).ToList();
+        return items.Select(InventoryMapper.MapToDto).ToList();
     }
 }
 
@@ -208,7 +208,7 @@ public class GetLowStockQueryHandler : IRequestHandler<GetLowStockQuery, List<In
 
 file static class InventoryMapper
 {
-    public static InventoryDto MapToDto(Inventory i) => new()
+    public static InventoryDto MapToDto(DomainInventory i) => new()
     {
         Id = i.Id,
         ProductId = i.ProductId,
@@ -221,3 +221,4 @@ file static class InventoryMapper
         UpdatedAt = i.UpdatedAt
     };
 }
+

@@ -1,11 +1,11 @@
-﻿using ECommerce.Identity.Application.DTOs;
+using ECommerce.Identity.Application.DTOs;
 using ECommerce.Identity.Application.Features.Queries;
 using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using static ECommerce.Identity.Application.Interfaces.IIdentityInterfaces;
-using static ECommerce.Shared.Common.Exceptions.DomainExceptions;
+using ECommerce.Shared.Common.Exceptions;
 
 namespace ECommerce.Identity.Application.Features.Handlers
 {

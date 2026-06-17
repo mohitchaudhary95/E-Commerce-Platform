@@ -8,9 +8,10 @@
 
   <ItemGroup>
     <PackageReference Include="MediatR" Version="14.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.9" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.7" />
+    <PackageReference Include="Microsoft.OpenApi" Version="1.8.1" />
     <PackageReference Include="Serilog" Version="4.3.1" />
     <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="10.2.1" />
@@ -22,6 +23,9 @@
     <ProjectReference Include="..\ECommerce.Identity.Application\ECommerce.Identity.Application.csproj" />
     <ProjectReference Include="..\ECommerce.Identity.Infrastructure\ECommerce.Identity.Infrastructure.csproj" />
     <ProjectReference Include="..\ECommerce.Shared.Common\ECommerce.Shared.Common.csproj" />
+    <ProjectReference Include="..\ECommerce.Identity.Domain\ECommerce.Identity.Domain.csproj" />
+    <ProjectReference Include="..\ECommerce.Shared.Contracts\ECommerce.Shared.Contracts.csproj" />
+    <ProjectReference Include="..\ECommerce.Shared.RabbitMQ\ECommerce.Shared.RabbitMQ.csproj" />
   </ItemGroup>
 
 </Project>

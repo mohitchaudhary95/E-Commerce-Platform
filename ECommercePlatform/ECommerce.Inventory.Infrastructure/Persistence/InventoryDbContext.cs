@@ -1,3 +1,4 @@
+using DomainInventory = ECommerce.Inventory.Domain.Entities.Inventory;
 using ECommerce.Inventory.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -8,7 +9,7 @@ public class InventoryDbContext : DbContext
 {
     public InventoryDbContext(DbContextOptions<InventoryDbContext> options) : base(options) { }
 
-    public DbSet<Inventory> Inventories => Set<Inventory>();
+    public DbSet<DomainInventory> Inventories => Set<DomainInventory>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -17,9 +18,9 @@ public class InventoryDbContext : DbContext
     }
 }
 
-public class InventoryConfiguration : IEntityTypeConfiguration<Inventory>
+public class InventoryConfiguration : IEntityTypeConfiguration<DomainInventory>
 {
-    public void Configure(EntityTypeBuilder<Inventory> builder)
+    public void Configure(EntityTypeBuilder<DomainInventory> builder)
     {
         builder.ToTable("Inventories");
         builder.HasKey(i => i.Id);
@@ -37,3 +38,4 @@ public class InventoryConfiguration : IEntityTypeConfiguration<Inventory>
         builder.Ignore(i => i.IsLowStock);
     }
 }
+

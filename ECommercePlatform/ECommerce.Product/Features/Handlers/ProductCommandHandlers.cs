@@ -27,7 +27,7 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
         var category = await _categoryRepository.GetByIdAsync(request.Dto.CategoryId, cancellationToken)
             ?? throw new NotFoundException("Category", request.Dto.CategoryId);
 
-        var product = new ECommerce.Product.Domain.Entities.Product
+        var product = new global::ECommerce.Product.Domain.Entities.Product
         {
             Name = request.Dto.Name,
             Description = request.Dto.Description,
@@ -41,7 +41,7 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
         return MapToDto(product, category.Name);
     }
 
-    private static ProductDto MapToDto(ECommerce.Product.Domain.Entities.Product p, string categoryName) => new()
+    private static ProductDto MapToDto(global::ECommerce.Product.Domain.Entities.Product p, string categoryName) => new()
     {
         Id = p.Id,
         Name = p.Name,
@@ -143,3 +143,4 @@ public class DeleteProductCommandHandler : IRequestHandler<DeleteProductCommand,
         return true;
     }
 }
+

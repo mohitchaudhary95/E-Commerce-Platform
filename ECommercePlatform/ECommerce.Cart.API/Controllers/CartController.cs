@@ -1,4 +1,4 @@
-﻿using ECommerce.Cart.Application.DTOs;
+using ECommerce.Cart.Application.DTOs;
 using ECommerce.Cart.Application.Features.Commands;
 using ECommerce.Cart.Application.Features.Queries;
 using ECommerce.Shared.Common.Responses;
@@ -87,7 +87,7 @@ namespace ECommerce.Cart.API.Controllers
             return Ok(ApiResponse.OkNoData("Cart cleared."));
         }
 
-        // ── Helper ────────────────────────────────────────────────────────────────
+        // -- Helper ----------------------------------------------------------------
 
         /// <summary>
         /// Extracts UserId from the JWT token's "sub" claim.

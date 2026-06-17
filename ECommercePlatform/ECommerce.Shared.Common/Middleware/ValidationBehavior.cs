@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using FluentValidation;
@@ -23,7 +23,7 @@ namespace ECommerce.Shared.Common.Middleware
             CancellationToken cancellationToken)
         {
             if (!_validators.Any())
-                return await next(); // No validators registered — skip
+                return await next(); // No validators registered � skip
 
             var context = new ValidationContext<TRequest>(request);
 

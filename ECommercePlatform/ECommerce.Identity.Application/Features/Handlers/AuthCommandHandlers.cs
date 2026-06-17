@@ -1,4 +1,4 @@
-﻿using ECommerce.Identity.Application.DTOs;
+using ECommerce.Identity.Application.DTOs;
 using ECommerce.Identity.Application.Features.Commands;
 using ECommerce.Identity.Domain.Entities;
 using MediatR;
@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using static ECommerce.Identity.Application.Interfaces.IIdentityInterfaces;
-using static ECommerce.Shared.Common.Exceptions.DomainExceptions;
+using ECommerce.Shared.Common.Exceptions;
 
 namespace ECommerce.Identity.Application.Features.Handlers
 {
@@ -114,7 +114,7 @@ namespace ECommerce.Identity.Application.Features.Handlers
 
             public async Task<TokenResponseDto> Handle(LoginCommand request, CancellationToken cancellationToken)
             {
-                // Security tip: always say "Invalid credentials" — never "email not found"
+                // Security tip: always say "Invalid credentials" � never "email not found"
                 // Telling which one is wrong helps attackers enumerate valid emails
                 var user = await _userRepository.GetByEmailAsync(
                     request.Dto.Email.ToLowerInvariant(), cancellationToken);

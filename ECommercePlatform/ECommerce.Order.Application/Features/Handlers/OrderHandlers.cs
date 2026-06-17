@@ -39,7 +39,7 @@ public class CancelOrderCommandHandler : IRequestHandler<CancelOrderCommand, Ord
 
         await _orderRepository.UpdateAsync(order, cancellationToken);
 
-        return MapToDto(order);
+        return OrderMapper.MapToDto(order);
     }
 }
 
@@ -104,7 +104,7 @@ public class GetOrderByIdQueryHandler : IRequestHandler<GetOrderByIdQuery, Order
         if (order.UserId != request.UserId)
             throw new ForbiddenException("You can only view your own orders.");
 
-        return MapToDto(order);
+        return OrderMapper.MapToDto(order);
     }
 }
 
@@ -153,3 +153,5 @@ file static class OrderMapper
         }).ToList()
     };
 }
+
+

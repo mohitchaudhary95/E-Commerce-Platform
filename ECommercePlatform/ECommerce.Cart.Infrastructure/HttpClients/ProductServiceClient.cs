@@ -1,4 +1,4 @@
-﻿using ECommerce.Cart.Application.DTOs;
+using ECommerce.Cart.Application.DTOs;
 using ECommerce.Cart.Application.Interfaces;
 using Microsoft.Extensions.Logging;
 using System;
@@ -15,7 +15,7 @@ namespace ECommerce.Cart.Infrastructure.HttpClients
 
         private static readonly JsonSerializerOptions JsonOptions = new()
         {
-            PropertyNameCaseInsensitive = true  // Handles camelCase from API → PascalCase DTO
+            PropertyNameCaseInsensitive = true  // Handles camelCase from API ? PascalCase DTO
         };
 
         public ProductServiceClient(HttpClient httpClient, ILogger<ProductServiceClient> logger)

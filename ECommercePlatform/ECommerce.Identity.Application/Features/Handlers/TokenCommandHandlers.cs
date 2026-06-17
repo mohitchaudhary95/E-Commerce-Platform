@@ -1,4 +1,4 @@
-ï»¿using ECommerce.Identity.Application.DTOs;
+using ECommerce.Identity.Application.DTOs;
 using ECommerce.Identity.Application.Features.Commands;
 using ECommerce.Identity.Domain.Entities;
 using MediatR;
@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using static ECommerce.Identity.Application.Interfaces.IIdentityInterfaces;
-using static ECommerce.Shared.Common.Exceptions.DomainExceptions;
+using ECommerce.Shared.Common.Exceptions;
 
 namespace ECommerce.Identity.Application.Features.Handlers
 {
@@ -32,7 +32,7 @@ namespace ECommerce.Identity.Application.Features.Handlers
             {
                 var storedToken = await _refreshTokenRepository.GetByTokenAsync(request.RefreshToken, cancellationToken);
 
-                // Security: vague error message â€” don't hint what's wrong
+                // Security: vague error message — don't hint what's wrong
                 if (storedToken == null || !storedToken.IsActive)
                     throw new BusinessRuleException("Invalid or expired refresh token.");
 
@@ -40,7 +40,7 @@ namespace ECommerce.Identity.Application.Features.Handlers
                 if (user == null || !user.IsActive)
                     throw new BusinessRuleException("Invalid or expired refresh token.");
 
-                // Mark old token as used â€” token rotation (prevents reuse)
+                // Mark old token as used — token rotation (prevents reuse)
                 storedToken.IsUsed = true;
                 await _refreshTokenRepository.UpdateAsync(storedToken, cancellationToken);
 
@@ -107,7 +107,7 @@ namespace ECommerce.Identity.Application.Features.Handlers
 
                 await _userRepository.UpdateAsync(user, cancellationToken);
 
-                // Revoke all refresh tokens â€” force re-login on all devices after password change
+                // Revoke all refresh tokens — force re-login on all devices after password change
                 await _refreshTokenRepository.RevokeAllUserTokensAsync(user.Id, cancellationToken);
 
                 return true;
@@ -115,7 +115,7 @@ namespace ECommerce.Identity.Application.Features.Handlers
         }
 
         /// <summary>
-        /// Handles logout â€” revokes all refresh tokens for a user.
+        /// Handles logout — revokes all refresh tokens for a user.
         /// </summary>
         public class RevokeTokenCommandHandler : IRequestHandler<RevokeTokenCommand, bool>
         {

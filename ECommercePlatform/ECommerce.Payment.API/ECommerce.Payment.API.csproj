@@ -7,11 +7,23 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR" Version="14.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.9" />
+    <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Controllers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ECommerce.Payment.Application\ECommerce.Payment.Application.csproj" />
+    <ProjectReference Include="..\ECommerce.Payment.Infrastructure\ECommerce.Payment.Infrastructure.csproj" />
+    <ProjectReference Include="..\ECommerce.Payment.Domain\ECommerce.Payment.Domain.csproj" />
+    <ProjectReference Include="..\ECommerce.Shared.Common\ECommerce.Shared.Common.csproj" />
+    <ProjectReference Include="..\ECommerce.Shared.Contracts\ECommerce.Shared.Contracts.csproj" />
+    <ProjectReference Include="..\ECommerce.Shared.RabbitMQ\ECommerce.Shared.RabbitMQ.csproj" />
   </ItemGroup>
 
 </Project>

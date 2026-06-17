@@ -1,6 +1,8 @@
 using ECommerce.Cart.Application.DTOs;
 using ECommerce.Cart.Application.Features.Commands;
 using ECommerce.Cart.Application.Interfaces;
+using DomainCart = ECommerce.Cart.Domain.Entities.Cart;
+using ECommerce.Cart.Domain.Entities;
 using ECommerce.Cart.Domain.Entities;
 using ECommerce.Shared.Common.Exceptions;
 using MediatR;
@@ -48,7 +50,7 @@ public class AddToCartCommandHandler : IRequestHandler<AddToCartCommand, CartDto
         if (cart == null)
         {
             // First time user adds to cart — create a fresh cart
-            cart = new Cart
+            cart = new DomainCart
             {
                 UserId = request.UserId,
                 Items = new List<CartItem>()
@@ -85,7 +87,7 @@ public class AddToCartCommandHandler : IRequestHandler<AddToCartCommand, CartDto
         return MapToDto(cart);
     }
 
-    private static CartDto MapToDto(ECommerce.Cart.Domain.Entities.Cart cart) => new()
+    private static CartDto MapToDto(DomainCart cart) => new()
     {
         Id = cart.Id,
         UserId = cart.UserId,
@@ -104,3 +106,6 @@ public class AddToCartCommandHandler : IRequestHandler<AddToCartCommand, CartDto
         }).ToList()
     };
 }
+
+
+

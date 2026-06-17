@@ -1,4 +1,5 @@
-﻿using ECommerce.Identity.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
+using ECommerce.Identity.Domain.Entities;
 using ECommerce.Identity.Infrastructure.Persistence;
 using System;
 using System.Collections.Generic;
@@ -75,7 +76,7 @@ namespace ECommerce.Identity.Infrastructure.Repositories
 
             public async Task RevokeAllUserTokensAsync(Guid userId, CancellationToken cancellationToken = default)
             {
-                // Bulk update — more efficient than loading each token individually
+                // Bulk update � more efficient than loading each token individually
                 await _context.RefreshTokens
                     .Where(rt => rt.UserId == userId && !rt.IsRevoked)
                     .ExecuteUpdateAsync(s => s
@@ -84,4 +85,5 @@ namespace ECommerce.Identity.Infrastructure.Repositories
             }
         }
     }
+
 
