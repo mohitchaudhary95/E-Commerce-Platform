@@ -14,6 +14,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using Serilog;
 using static ECommerce.Identity.Application.Interfaces.IIdentityInterfaces;
+using static ECommerce.Identity.Application.Features.Validators.IdentityValidators;
 namespace ECommerce.Identity.API
 {
     public class Program
