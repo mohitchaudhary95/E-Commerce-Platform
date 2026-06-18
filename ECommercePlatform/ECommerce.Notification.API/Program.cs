@@ -1,3 +1,4 @@
+﻿using Microsoft.OpenApi.Models;
 using ECommerce.Notification.Application.Features.Commands;
 using ECommerce.Notification.Application.Interfaces;
 using ECommerce.Notification.Infrastructure.RabbitMQ.Consumers;
@@ -7,7 +8,7 @@ using MediatR;
 using Serilog;
 
 /// <summary>
-/// NotificationService has no API controllers — it's purely event-driven.
+/// NotificationService has no API controllers â€” it's purely event-driven.
 /// It starts, registers its two RabbitMQ consumers as BackgroundServices,
 /// and just listens forever. That's it.
 ///
@@ -23,15 +24,15 @@ Log.Logger = new LoggerConfiguration()
     .CreateLogger();
 builder.Host.UseSerilog();
 
-// ─── MediatR ──────────────────────────────────────────────────────────────────
+// â”€â”€â”€ MediatR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(typeof(SendOrderConfirmationEmailCommand).Assembly));
 
-// ─── Email Service ────────────────────────────────────────────────────────────
-// Swap ConsoleEmailService → SendGridEmailService for production
+// â”€â”€â”€ Email Service â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Swap ConsoleEmailService â†’ SendGridEmailService for production
 builder.Services.AddScoped<IEmailService, ConsoleEmailService>();
 
-// ─── RabbitMQ ─────────────────────────────────────────────────────────────────
+// â”€â”€â”€ RabbitMQ â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 builder.Services.Configure<RabbitMQSettings>(builder.Configuration.GetSection("RabbitMQ"));
 
 // Both consumers run as long-lived BackgroundServices
@@ -42,7 +43,8 @@ var app = builder.Build();
 
 app.UseSerilogRequestLogging();
 
-// Minimal health check endpoint — useful for Docker/k8s liveness probes
+// Minimal health check endpoint â€” useful for Docker/k8s liveness probes
 app.MapGet("/health", () => Results.Ok(new { Status = "Healthy", Service = "NotificationService" }));
 
 app.Run();
+

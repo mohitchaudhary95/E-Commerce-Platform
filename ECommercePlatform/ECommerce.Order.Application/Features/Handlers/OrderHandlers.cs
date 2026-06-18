@@ -122,7 +122,7 @@ public class GetOrderHistoryQueryHandler : IRequestHandler<GetOrderHistoryQuery,
         var pagedOrders = await _orderRepository.GetByUserIdAsync(
             request.UserId, request.PageNumber, request.PageSize, cancellationToken);
 
-        var orderDtos = pagedOrders.Items.Select(MapToDto).ToList();
+        var orderDtos = pagedOrders.Items.Select(OrderMapper.MapToDto).ToList();
 
         return PagedResult<OrderDto>.Create(orderDtos, pagedOrders.TotalCount, request.PageNumber, request.PageSize);
     }

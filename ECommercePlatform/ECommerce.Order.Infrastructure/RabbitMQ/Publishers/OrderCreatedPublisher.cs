@@ -34,14 +34,14 @@ public class OrderCreatedPublisher : IOrderEventPublisher
 
     public async Task PublishOrderCreatedAsync(DomainOrder order, CancellationToken cancellationToken = default)
     {
-        var @event = new DomainOrderCreatedEvent
+        var @event = new OrderCreatedEvent
         {
             OrderId = order.Id,
             UserId = order.UserId,
             UserEmail = order.UserEmail,
             TotalAmount = order.TotalAmount,
             CreatedAt = order.CreatedAt,
-            Items = order.Items.Select(i => new DomainOrderCreatedItem
+            Items = order.Items.Select(i => new OrderCreatedItem
             {
                 ProductId = i.ProductId,
                 ProductName = i.ProductName,

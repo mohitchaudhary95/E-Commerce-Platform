@@ -1,3 +1,4 @@
+﻿using Microsoft.OpenApi.Models;
 
 using System.Text;
 using ECommerce.Cart.Application.Features.Commands;
@@ -23,7 +24,7 @@ namespace ECommerce.Cart.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // ─── Serilog ──────────────────────────────────────────────────────────────────
+            // â”€â”€â”€ Serilog â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(builder.Configuration)
                 .Enrich.FromLogContext()
@@ -31,22 +32,22 @@ namespace ECommerce.Cart.API
                 .CreateLogger();
             builder.Host.UseSerilog();
 
-            // ─── Database ─────────────────────────────────────────────────────────────────
+            // â”€â”€â”€ Database â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
             builder.Services.AddDbContext<CartDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("CartDb")));
 
-            // ─── MediatR + Validation Pipeline ───────────────────────────────────────────
+            // â”€â”€â”€ MediatR + Validation Pipeline â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
             builder.Services.AddMediatR(cfg =>
                 cfg.RegisterServicesFromAssembly(typeof(AddToCartCommand).Assembly));
 
             builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
             builder.Services.AddValidatorsFromAssemblyContaining<AddToCartValidator>();
 
-            // ─── Repositories ─────────────────────────────────────────────────────────────
+            // â”€â”€â”€ Repositories â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
             builder.Services.AddScoped<ICartRepository, CartRepository>();
 
-            // ─── HTTP Client for ProductService ───────────────────────────────────────────
-            // IHttpClientFactory pattern — managed, pooled HTTP connections.
+            // â”€â”€â”€ HTTP Client for ProductService â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+            // IHttpClientFactory pattern â€” managed, pooled HTTP connections.
             // BaseAddress comes from config so it's easy to change for Docker/production.
             builder.Services.AddHttpClient<IProductServiceClient, ProductServiceClient>(client =>
             {
@@ -54,7 +55,7 @@ namespace ECommerce.Cart.API
                 client.Timeout = TimeSpan.FromSeconds(10); // Don't wait forever if ProductService is slow
             });
 
-            // ─── JWT Authentication ───────────────────────────────────────────────────────
+            // â”€â”€â”€ JWT Authentication â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
             var jwtKey = builder.Configuration["JwtSettings:SecretKey"]!;
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -74,7 +75,7 @@ namespace ECommerce.Cart.API
 
             builder.Services.AddAuthorization();
 
-            // ─── Swagger ──────────────────────────────────────────────────────────────────
+            // â”€â”€â”€ Swagger â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(options =>
             {
@@ -121,3 +122,4 @@ namespace ECommerce.Cart.API
         }
     }
 }
+

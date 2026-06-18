@@ -21,9 +21,9 @@ public class InventoryUpdatedPublisher : IInventoryEventPublisher
     }
 
     public async Task PublishInventoryUpdatedAsync(
-        Inventory inventory, string reason, CancellationToken cancellationToken = default)
+        DomainInventory inventory, string reason, CancellationToken cancellationToken = default)
     {
-        var @event = new DomainInventoryUpdatedEvent
+        var @event = new InventoryUpdatedEvent
         {
             ProductId = inventory.ProductId,
             ProductName = inventory.ProductName,

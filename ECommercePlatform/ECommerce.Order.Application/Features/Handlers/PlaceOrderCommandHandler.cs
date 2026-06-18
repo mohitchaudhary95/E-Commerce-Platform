@@ -2,6 +2,7 @@ using ECommerce.Order.Application.DTOs;
 using ECommerce.Order.Application.Features.Commands;
 using ECommerce.Order.Application.Interfaces;
 using DomainOrder = ECommerce.Order.Domain.Entities.Order;
+using DomainOrderItem = ECommerce.Order.Domain.Entities.OrderItem;
 using ECommerce.Order.Domain.Entities;
 using ECommerce.Shared.Common.Exceptions;
 using MediatR;
