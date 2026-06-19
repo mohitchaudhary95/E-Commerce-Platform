@@ -94,7 +94,12 @@ namespace ECommerce.Product.API
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.RoutePrefix = string.Empty);
+
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Product Service API V1");
+                    c.RoutePrefix = string.Empty;
+                });
             }
 
             app.UseSerilogRequestLogging();

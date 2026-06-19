@@ -43,7 +43,7 @@ services:
   gateway:
     build:
       context: .
-      dockerfile: src/Gateway/ECommerce.Gateway/Dockerfile
+      dockerfile: ECommerce.Gateway/Dockerfile
     container_name: ecommerce-gateway
     ports:
       - "5000:5000"
@@ -60,7 +60,7 @@ services:
   identity-service:
     build:
       context: .
-      dockerfile: src/Services/IdentityService/ECommerce.Identity.API/Dockerfile
+      dockerfile: ECommerce.Identity.API/Dockerfile
     container_name: ecommerce-identity
     ports:
       - "5001:5001"
@@ -78,7 +78,7 @@ services:
   product-service:
     build:
       context: .
-      dockerfile: src/Services/ProductService/ECommerce.Product.API/Dockerfile
+      dockerfile: ECommerce.Product.API/Dockerfile
     container_name: ecommerce-product
     ports:
       - "5002:5002"
@@ -96,7 +96,7 @@ services:
   cart-service:
     build:
       context: .
-      dockerfile: src/Services/CartService/ECommerce.Cart.API/Dockerfile
+      dockerfile: ECommerce.Cart.API/Dockerfile
     container_name: ecommerce-cart
     ports:
       - "5003:5003"
@@ -117,7 +117,7 @@ services:
   order-service:
     build:
       context: .
-      dockerfile: src/Services/OrderService/ECommerce.Order.API/Dockerfile
+      dockerfile: ECommerce.Order.API/Dockerfile
     container_name: ecommerce-order
     ports:
       - "5004:5004"
@@ -138,7 +138,7 @@ services:
   payment-service:
     build:
       context: .
-      dockerfile: src/Services/PaymentService/ECommerce.Payment.API/Dockerfile
+      dockerfile: ECommerce.Payment.API/Dockerfile
     container_name: ecommerce-payment
     ports:
       - "5005:5005"
@@ -159,7 +159,7 @@ services:
   inventory-service:
     build:
       context: .
-      dockerfile: src/Services/InventoryService/ECommerce.Inventory.API/Dockerfile
+      dockerfile: ECommerce.Inventory.API/Dockerfile
     container_name: ecommerce-inventory
     ports:
       - "5006:5006"
@@ -180,7 +180,7 @@ services:
   notification-service:
     build:
       context: .
-      dockerfile: src/Services/NotificationService/ECommerce.Notification.API/Dockerfile
+      dockerfile: ECommerce.Notification.API/Dockerfile
     container_name: ecommerce-notification
     ports:
       - "5007:5007"
