@@ -1,15 +1,20 @@
 {
   "Routes": [
-
-    // ── Identity Service ──────────────────────────────────────────────────────
-    // Auth endpoints are public (no JWT required at gateway level)
     {
       "UpstreamPathTemplate": "/api/auth/{everything}",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
       "DownstreamPathTemplate": "/api/auth/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
-        { "Host": "localhost", "Port": 5001 }
+        {
+          "Host": "ecommerce-identity",
+          "Port": 5001
+        }
       ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": ""
@@ -24,26 +29,39 @@
     },
     {
       "UpstreamPathTemplate": "/api/users/{everything}",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
       "DownstreamPathTemplate": "/api/users/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
-        { "Host": "localhost", "Port": 5001 }
+        {
+          "Host": "ecommerce-identity",
+          "Port": 5001
+        }
       ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
       }
     },
-
-    // ── Product Service ───────────────────────────────────────────────────────
-    // GET endpoints are public; POST/PUT/DELETE require JWT (handled by service)
     {
       "UpstreamPathTemplate": "/api/products/{everything}",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
       "DownstreamPathTemplate": "/api/products/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
-        { "Host": "localhost", "Port": 5002 }
+        {
+          "Host": "ecommerce-product",
+          "Port": 5002
+        }
       ],
       "RateLimitOptions": {
         "EnableRateLimiting": true,
@@ -54,77 +72,126 @@
     },
     {
       "UpstreamPathTemplate": "/api/categories/{everything}",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
       "DownstreamPathTemplate": "/api/categories/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
-        { "Host": "localhost", "Port": 5002 }
+        {
+          "Host": "ecommerce-product",
+          "Port": 5002
+        }
       ]
     },
-
-    // ── Cart Service ──────────────────────────────────────────────────────────
     {
       "UpstreamPathTemplate": "/api/cart/{everything}",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
       "DownstreamPathTemplate": "/api/cart/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
-        { "Host": "localhost", "Port": 5003 }
+        {
+          "Host": "ecommerce-cart",
+          "Port": 5003
+        }
       ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
       }
     },
-
-    // ── Order Service ─────────────────────────────────────────────────────────
     {
       "UpstreamPathTemplate": "/api/orders/{everything}",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
       "DownstreamPathTemplate": "/api/orders/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
-        { "Host": "localhost", "Port": 5004 }
+        {
+          "Host": "ecommerce-order",
+          "Port": 5004
+        }
       ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
       }
     },
-
-    // ── Payment Service ───────────────────────────────────────────────────────
     {
       "UpstreamPathTemplate": "/api/payments/{everything}",
-      "UpstreamHttpMethod": [ "GET" ],
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
       "DownstreamPathTemplate": "/api/payments/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
-        { "Host": "localhost", "Port": 5005 }
+        {
+          "Host": "ecommerce-payment",
+          "Port": 5005
+        }
       ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
       }
     },
-
-    // ── Inventory Service ─────────────────────────────────────────────────────
     {
       "UpstreamPathTemplate": "/api/inventory/{everything}",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "PATCH", "DELETE" ],
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "PATCH",
+        "DELETE"
+      ],
       "DownstreamPathTemplate": "/api/inventory/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
-        { "Host": "localhost", "Port": 5006 }
+        {
+          "Host": "ecommerce-inventory",
+          "Port": 5006
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/api/notifications/{everything}",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "DownstreamPathTemplate": "/api/notifications/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "ecommerce-notification",
+          "Port": 5007
+        }
       ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
       }
     }
   ],
-
   "GlobalConfiguration": {
     "BaseUrl": "http://localhost:5000",
-
-    // All requests passing through the gateway are logged
     "RequestIdKey": "X-Request-Id",
-
     "RateLimitOptions": {
       "DisableRateLimitHeaders": false,
       "QuotaExceededMessage": "Too many requests. Please try again later.",

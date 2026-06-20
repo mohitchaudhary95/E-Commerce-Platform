@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
 
-  # ── Infrastructure ────────────────────────────────────────────────────────────
+  # ───────────────── Infrastructure ─────────────────
 
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
@@ -15,18 +15,13 @@ services:
       - "1433:1433"
     volumes:
       - sqlserver_data:/var/opt/mssql
-    healthcheck:
-      test: ["CMD", "/opt/mssql-tools/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-P", "YourStrong@Passw0rd", "-Q", "SELECT 1"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
 
   rabbitmq:
     image: rabbitmq:3-management
     container_name: ecommerce-rabbitmq
     ports:
-      - "5672:5672"   # AMQP protocol port
-      - "15672:15672" # Management UI → http://localhost:15672 (guest/guest)
+      - "5672:5672"
+      - "15672:15672"
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
@@ -38,7 +33,7 @@ services:
       timeout: 5s
       retries: 10
 
-  # ── Services ──────────────────────────────────────────────────────────────────
+  # ───────────────── Gateway ─────────────────
 
   gateway:
     build:
@@ -48,14 +43,16 @@ services:
     ports:
       - "5000:5000"
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:5000
-      - JwtSettings__SecretKey=YourSuperSecretKeyThatIsAtLeast32CharactersLong!!
-      - JwtSettings__Issuer=ECommerce.Identity
-      - JwtSettings__Audience=ECommerce.Client
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:5000
+      JwtSettings__SecretKey: YourSuperSecretKeyThatIsAtLeast32CharactersLong!!
+      JwtSettings__Issuer: ECommerce.Identity
+      JwtSettings__Audience: ECommerce.Client
     depends_on:
       - identity-service
       - product-service
+
+  # ───────────────── Identity Service ─────────────────
 
   identity-service:
     build:
@@ -65,15 +62,16 @@ services:
     ports:
       - "5001:5001"
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:5001
-      - ConnectionStrings__IdentityDb=Server=sqlserver,1433;Database=IdentityDb;User Id=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=True
-      - JwtSettings__SecretKey=YourSuperSecretKeyThatIsAtLeast32CharactersLong!!
-      - JwtSettings__Issuer=ECommerce.Identity
-      - JwtSettings__Audience=ECommerce.Client
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:5001
+      ConnectionStrings__IdentityDb: Server=sqlserver,1433;Database=IdentityDb;User Id=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=True;Encrypt=False
+      JwtSettings__SecretKey: YourSuperSecretKeyThatIsAtLeast32CharactersLong!!
+      JwtSettings__Issuer: ECommerce.Identity
+      JwtSettings__Audience: ECommerce.Client
     depends_on:
-      sqlserver:
-        condition: service_healthy
+      - sqlserver
+
+  # ───────────────── Product Service ─────────────────
 
   product-service:
     build:
@@ -83,15 +81,16 @@ services:
     ports:
       - "5002:5002"
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:5002
-      - ConnectionStrings__ProductDb=Server=sqlserver,1433;Database=ProductDb;User Id=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=True
-      - JwtSettings__SecretKey=YourSuperSecretKeyThatIsAtLeast32CharactersLong!!
-      - JwtSettings__Issuer=ECommerce.Identity
-      - JwtSettings__Audience=ECommerce.Client
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:5002
+      ConnectionStrings__ProductDb: Server=sqlserver,1433;Database=ProductDb;User Id=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=True;Encrypt=False
+      JwtSettings__SecretKey: YourSuperSecretKeyThatIsAtLeast32CharactersLong!!
+      JwtSettings__Issuer: ECommerce.Identity
+      JwtSettings__Audience: ECommerce.Client
     depends_on:
-      sqlserver:
-        condition: service_healthy
+      - sqlserver
+
+  # ───────────────── Cart Service ─────────────────
 
   cart-service:
     build:
@@ -101,18 +100,18 @@ services:
     ports:
       - "5003:5003"
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:5003
-      - ConnectionStrings__CartDb=Server=sqlserver,1433;Database=CartDb;User Id=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=True
-      - JwtSettings__SecretKey=YourSuperSecretKeyThatIsAtLeast32CharactersLong!!
-      - JwtSettings__Issuer=ECommerce.Identity
-      - JwtSettings__Audience=ECommerce.Client
-      - ServiceUrls__ProductService=http://product-service:5002/
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:5003
+      ConnectionStrings__CartDb: Server=sqlserver,1433;Database=CartDb;User Id=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=True;Encrypt=False
+      ServiceUrls__ProductService: http://product-service:5002/
+      JwtSettings__SecretKey: YourSuperSecretKeyThatIsAtLeast32CharactersLong!!
+      JwtSettings__Issuer: ECommerce.Identity
+      JwtSettings__Audience: ECommerce.Client
     depends_on:
-      sqlserver:
-        condition: service_healthy
-      product-service:
-        condition: service_started
+      - sqlserver
+      - product-service
+
+  # ───────────────── Order Service ─────────────────
 
   order-service:
     build:
@@ -122,18 +121,18 @@ services:
     ports:
       - "5004:5004"
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:5004
-      - ConnectionStrings__OrderDb=Server=sqlserver,1433;Database=OrderDb;User Id=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=True
-      - JwtSettings__SecretKey=YourSuperSecretKeyThatIsAtLeast32CharactersLong!!
-      - JwtSettings__Issuer=ECommerce.Identity
-      - JwtSettings__Audience=ECommerce.Client
-      - RabbitMQ__Host=rabbitmq
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:5004
+      ConnectionStrings__OrderDb: Server=sqlserver,1433;Database=OrderDb;User Id=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=True;Encrypt=False
+      RabbitMQ__Host: rabbitmq
+      JwtSettings__SecretKey: YourSuperSecretKeyThatIsAtLeast32CharactersLong!!
+      JwtSettings__Issuer: ECommerce.Identity
+      JwtSettings__Audience: ECommerce.Client
     depends_on:
-      sqlserver:
-        condition: service_healthy
-      rabbitmq:
-        condition: service_healthy
+      - sqlserver
+      - rabbitmq
+
+  # ───────────────── Payment Service ─────────────────
 
   payment-service:
     build:
@@ -143,18 +142,18 @@ services:
     ports:
       - "5005:5005"
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:5005
-      - ConnectionStrings__PaymentDb=Server=sqlserver,1433;Database=PaymentDb;User Id=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=True
-      - JwtSettings__SecretKey=YourSuperSecretKeyThatIsAtLeast32CharactersLong!!
-      - JwtSettings__Issuer=ECommerce.Identity
-      - JwtSettings__Audience=ECommerce.Client
-      - RabbitMQ__Host=rabbitmq
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:5005
+      ConnectionStrings__PaymentDb: Server=sqlserver,1433;Database=PaymentDb;User Id=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=True;Encrypt=False
+      RabbitMQ__Host: rabbitmq
+      JwtSettings__SecretKey: YourSuperSecretKeyThatIsAtLeast32CharactersLong!!
+      JwtSettings__Issuer: ECommerce.Identity
+      JwtSettings__Audience: ECommerce.Client
     depends_on:
-      sqlserver:
-        condition: service_healthy
-      rabbitmq:
-        condition: service_healthy
+      - sqlserver
+      - rabbitmq
+
+  # ───────────────── Inventory Service ─────────────────
 
   inventory-service:
     build:
@@ -164,18 +163,18 @@ services:
     ports:
       - "5006:5006"
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:5006
-      - ConnectionStrings__InventoryDb=Server=sqlserver,1433;Database=InventoryDb;User Id=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=True
-      - JwtSettings__SecretKey=YourSuperSecretKeyThatIsAtLeast32CharactersLong!!
-      - JwtSettings__Issuer=ECommerce.Identity
-      - JwtSettings__Audience=ECommerce.Client
-      - RabbitMQ__Host=rabbitmq
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:5006
+      ConnectionStrings__InventoryDb: Server=sqlserver,1433;Database=InventoryDb;User Id=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=True;Encrypt=False
+      RabbitMQ__Host: rabbitmq
+      JwtSettings__SecretKey: YourSuperSecretKeyThatIsAtLeast32CharactersLong!!
+      JwtSettings__Issuer: ECommerce.Identity
+      JwtSettings__Audience: ECommerce.Client
     depends_on:
-      sqlserver:
-        condition: service_healthy
-      rabbitmq:
-        condition: service_healthy
+      - sqlserver
+      - rabbitmq  
+
+  # ───────────────── Notification Service ─────────────────
 
   notification-service:
     build:
@@ -185,12 +184,11 @@ services:
     ports:
       - "5007:5007"
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:5007
-      - RabbitMQ__Host=rabbitmq
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:5007
+      RabbitMQ__Host: rabbitmq
     depends_on:
-      rabbitmq:
-        condition: service_healthy
+      - rabbitmq
 
 volumes:
   sqlserver_data:
