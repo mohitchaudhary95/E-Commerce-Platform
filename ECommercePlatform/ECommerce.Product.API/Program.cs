@@ -109,10 +109,56 @@ namespace ECommerce.Product.API
             app.MapControllers();
 
             using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ProductDbContext>();
+    
+    var retries = 0;
+    while (retries < 5)
+    {
+        try
+        {
+            db.Database.Migrate();
+            break;
+        }
+        catch
+        {
+            retries++;
+            Thread.Sleep(3000);
+        }
+    }
+
+    // Seed categories only if they don't already exist
+    if (!db.Categories.Any())
+    {
+        db.Categories.AddRange(
+            new ECommerce.Product.Domain.Entities.Category
             {
-                var db = scope.ServiceProvider.GetRequiredService<ProductDbContext>();
-                db.Database.Migrate();
+                Id = Guid.Parse("11111111-1111-1111-1111-111111111111"),
+                Name = "Electronics",
+                Description = "Electronic devices and accessories",
+                IsActive = true,
+                CreatedAt = DateTime.UtcNow
+            },
+            new ECommerce.Product.Domain.Entities.Category
+            {
+                Id = Guid.Parse("22222222-2222-2222-2222-222222222222"),
+                Name = "Clothing",
+                Description = "Apparel and fashion",
+                IsActive = true,
+                CreatedAt = DateTime.UtcNow
+            },
+            new ECommerce.Product.Domain.Entities.Category
+            {
+                Id = Guid.Parse("33333333-3333-3333-3333-333333333333"),
+                Name = "Books",
+                Description = "Physical and digital books",
+                IsActive = true,
+                CreatedAt = DateTime.UtcNow
             }
+        );
+        db.SaveChanges();
+    }
+}
 
             app.Run();
 

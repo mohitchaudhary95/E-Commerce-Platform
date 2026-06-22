@@ -1,32 +1,31 @@
 using ECommerce.Cart.Application.DTOs;
 using ECommerce.Cart.Domain.Entities;
 
-using DomainCart = ECommerce.Cart.Domain.Entities.Cart;
+// Same alias as CartRepository — keeps the type signatures consistent
+using CartEntity = ECommerce.Cart.Domain.Entities.Cart;
 
 namespace ECommerce.Cart.Application.Interfaces;
 
 /// <summary>
 /// Cart data access contract.
-/// GetByUserIdAsync is the most-called method — fetches cart with all items.
+/// Uses CartEntity alias because 'Cart' is both a namespace and a class —
+/// the alias removes the ambiguity across the entire project.
 /// </summary>
 public interface ICartRepository
 {
-    Task<DomainCart?> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken = default);
-    Task<DomainCart?> GetByIdAsync(Guid cartId, CancellationToken cancellationToken = default);
-    Task AddAsync(DomainCart cart, CancellationToken cancellationToken = default);
-    Task UpdateAsync(DomainCart cart, CancellationToken cancellationToken = default);
-    Task DeleteAsync(DomainCart cart, CancellationToken cancellationToken = default);
+    Task<CartEntity?> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken = default);
+    Task<CartEntity?> GetByIdAsync(Guid cartId, CancellationToken cancellationToken = default);
+    Task AddAsync(CartEntity cart, CancellationToken cancellationToken = default);
+    Task UpdateAsync(CartEntity cart, CancellationToken cancellationToken = default);
+    Task DeleteAsync(CartEntity cart, CancellationToken cancellationToken = default);
 }
 
 /// <summary>
 /// HTTP client contract for calling ProductService.
-///
-/// Why an interface instead of calling HttpClient directly in handlers?
-/// 1. Testability — we can mock this in unit tests (no real HTTP calls)
-/// 2. Single responsibility — HTTP logic stays in Infrastructure
-/// 3. If ProductService URL changes, only one place needs updating
+/// Defined here so handlers can depend on it without knowing about HttpClient.
 /// </summary>
 public interface IProductServiceClient
 {
-    Task<ProductResponseDto?> GetProductByIdAsync(Guid productId, CancellationToken cancellationToken = default);
+    Task<ProductResponseDto?> GetProductByIdAsync(
+        Guid productId, CancellationToken cancellationToken = default);
 }

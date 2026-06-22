@@ -1,11 +1,12 @@
 using ECommerce.Cart.Application.DTOs;
 using ECommerce.Cart.Application.Features.Commands;
 using ECommerce.Cart.Application.Interfaces;
-using DomainCart = ECommerce.Cart.Domain.Entities.Cart;
-using ECommerce.Cart.Domain.Entities;
 using ECommerce.Cart.Domain.Entities;
 using ECommerce.Shared.Common.Exceptions;
 using MediatR;
+
+// Alias needed because the class name 'Cart' conflicts with the namespace 'Cart'
+using CartEntity = ECommerce.Cart.Domain.Entities.Cart;
 
 namespace ECommerce.Cart.Application.Features.Handlers;
 
@@ -27,67 +28,92 @@ public class AddToCartCommandHandler : IRequestHandler<AddToCartCommand, CartDto
     private readonly ICartRepository _cartRepository;
     private readonly IProductServiceClient _productServiceClient;
 
-    public AddToCartCommandHandler(ICartRepository cartRepository, IProductServiceClient productServiceClient)
+    public AddToCartCommandHandler(
+        ICartRepository cartRepository,
+        IProductServiceClient productServiceClient)
     {
         _cartRepository = cartRepository;
         _productServiceClient = productServiceClient;
     }
 
-    public async Task<CartDto> Handle(AddToCartCommand request, CancellationToken cancellationToken)
+    public async Task<CartDto> Handle(
+        AddToCartCommand request, CancellationToken cancellationToken)
     {
-        // ── Step 1: Validate product via HTTP call to ProductService ──────────
-        var product = await _productServiceClient.GetProductByIdAsync(request.Dto.ProductId, cancellationToken);
+        // ── Step 1: Validate product via ProductService ───────────────────────
+        var product = await _productServiceClient
+            .GetProductByIdAsync(request.Dto.ProductId, cancellationToken);
 
         if (product == null)
             throw new NotFoundException("Product", request.Dto.ProductId);
 
         if (!product.IsActive)
-            throw new BusinessRuleException($"Product '{product.Name}' is no longer available.");
+            throw new BusinessRuleException(
+                $"Product '{product.Name}' is no longer available.");
 
-        // ── Step 2: Get or create cart ────────────────────────────────────────
-        var cart = await _cartRepository.GetByUserIdAsync(request.UserId, cancellationToken);
+        // ── Step 2: Get existing cart ─────────────────────────────────────────
+        // Variable named 'cart' (lowercase) — no collision with CartEntity alias
+        var cart = await _cartRepository.GetByUserIdAsync(
+            request.UserId, cancellationToken);
 
         if (cart == null)
         {
-            // First time user adds to cart — create a fresh cart
-            cart = new DomainCart
+            // ── New cart: create with the first item already inside ────────────
+            // EF Core sets CartId on the CartItem automatically via
+            // the navigation property — no need to set it manually here.
+            cart = new CartEntity
             {
                 UserId = request.UserId,
-                Items = new List<CartItem>()
+                Items = new List<CartItem>
+                {
+                    new CartItem
+                    {
+                        ProductId = product.Id,
+                        ProductName = product.Name,
+                        ProductImageUrl = product.ImageUrl,
+                        UnitPrice = product.Price,
+                        Quantity = request.Dto.Quantity
+                    }
+                }
             };
+
+            // One SaveChanges — saves the cart AND its item together
             await _cartRepository.AddAsync(cart, cancellationToken);
-        }
-
-        // ── Step 3: Add or update item ────────────────────────────────────────
-        var existingItem = cart.Items.FirstOrDefault(i => i.ProductId == request.Dto.ProductId);
-
-        if (existingItem != null)
-        {
-            // Product already in cart — just increase quantity
-            existingItem.Quantity += request.Dto.Quantity;
         }
         else
         {
-            // New item — create with SNAPSHOT of current price
-            var newItem = new CartItem
-            {
-                ProductId = product.Id,
-                ProductName = product.Name,
-                ProductImageUrl = product.ImageUrl,
-                UnitPrice = product.Price,  // Price locked at time of adding
-                Quantity = request.Dto.Quantity,
-                CartId = cart.Id
-            };
-            cart.Items.Add(newItem);
-        }
+            // ── Existing cart: EF change tracker already knows about it ────────
+            var existingItem = cart.Items
+                .FirstOrDefault(i => i.ProductId == request.Dto.ProductId);
 
-        cart.UpdatedAt = DateTime.UtcNow;
-        await _cartRepository.UpdateAsync(cart, cancellationToken);
+            if (existingItem != null)
+            {
+                // Product already in cart → just increase quantity
+                // EF automatically marks this as Modified
+                existingItem.Quantity += request.Dto.Quantity;
+            }
+            else
+            {
+                // New product → add a new CartItem row
+                // EF automatically marks this as Added
+                cart.Items.Add(new CartItem
+                {
+                    ProductId = product.Id,
+                    ProductName = product.Name,
+                    ProductImageUrl = product.ImageUrl,
+                    UnitPrice = product.Price,
+                    Quantity = request.Dto.Quantity,
+                    CartId = cart.Id
+                });
+            }
+
+            // One SaveChanges — EF generates the correct SQL for each change
+            await _cartRepository.UpdateAsync(cart, cancellationToken);
+        }
 
         return MapToDto(cart);
     }
 
-    private static CartDto MapToDto(DomainCart cart) => new()
+    private static CartDto MapToDto(CartEntity cart) => new()
     {
         Id = cart.Id,
         UserId = cart.UserId,
@@ -106,6 +132,3 @@ public class AddToCartCommandHandler : IRequestHandler<AddToCartCommand, CartDto
         }).ToList()
     };
 }
-
-
-

@@ -24,7 +24,7 @@ namespace ECommerce.Product.Infrastructure.Persistence.Configurations
                 .IsRequired()
                 .HasMaxLength(2000);
 
-            // Decimal precision — 18 digits total, 2 after decimal point
+            // Decimal precision ï¿½ 18 digits total, 2 after decimal point
             // This matches SQL Server's money column precision
             builder.Property(p => p.Price)
                 .IsRequired()
@@ -39,7 +39,7 @@ namespace ECommerce.Product.Infrastructure.Persistence.Configurations
             // Index on CategoryId for fast filtering by category
             builder.HasIndex(p => p.CategoryId);
 
-            // Composite index — speeds up the common query: active products in a category
+            // Composite index ï¿½ speeds up the common query: active products in a category
             builder.HasIndex(p => new { p.CategoryId, p.IsActive });
 
             builder.HasOne(p => p.Category)
@@ -67,11 +67,11 @@ namespace ECommerce.Product.Infrastructure.Persistence.Configurations
             builder.HasIndex(c => c.Name).IsUnique();
 
             // Seed some initial categories so the app works out of the box
-            builder.HasData(
-                new DomainCategory { Id = Guid.Parse("11111111-1111-1111-1111-111111111111"), Name = "Electronics", Description = "Electronic devices and accessories", IsActive = true, CreatedAt = DateTime.UtcNow },
-                new DomainCategory { Id = Guid.Parse("22222222-2222-2222-2222-222222222222"), Name = "Clothing", Description = "Apparel and fashion", IsActive = true, CreatedAt = DateTime.UtcNow },
-                new DomainCategory { Id = Guid.Parse("33333333-3333-3333-3333-333333333333"), Name = "Books", Description = "Physical and digital books", IsActive = true, CreatedAt = DateTime.UtcNow }
-            );
+            // builder.HasData(
+            //     new DomainCategory { Id = Guid.Parse("11111111-1111-1111-1111-111111111111"), Name = "Electronics", Description = "Electronic devices and accessories", IsActive = true, CreatedAt = DateTime.UtcNow },
+            //     new DomainCategory { Id = Guid.Parse("22222222-2222-2222-2222-222222222222"), Name = "Clothing", Description = "Apparel and fashion", IsActive = true, CreatedAt = DateTime.UtcNow },
+            //     new DomainCategory { Id = Guid.Parse("33333333-3333-3333-3333-333333333333"), Name = "Books", Description = "Physical and digital books", IsActive = true, CreatedAt = DateTime.UtcNow }
+            // );
         }
     }
 }
