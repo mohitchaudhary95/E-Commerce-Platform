@@ -117,7 +117,21 @@ app.MapControllers();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<OrderDbContext>();
-    db.Database.Migrate();
+    
+    var retries = 0;
+    while (retries < 5)
+    {
+        try
+        {
+            db.Database.Migrate();
+            break;
+        }
+        catch
+        {
+            retries++;
+            Thread.Sleep(3000);
+        }
+    }
 }
 
 app.Run();
