@@ -1,12 +1,11 @@
 using ECommerce.Payment.Application.DTOs;
 using ECommerce.Payment.Application.Features.Queries;
 using ECommerce.Payment.Application.Interfaces;
-using ECommerce.Shared.Common.Exceptions;
 using MediatR;
 
 namespace ECommerce.Payment.Application.Features.Handlers;
 
-public class GetPaymentByOrderIdQueryHandler : IRequestHandler<GetPaymentByOrderIdQuery, PaymentDto>
+public class GetPaymentByOrderIdQueryHandler : IRequestHandler<GetPaymentByOrderIdQuery, PaymentDto?>
 {
     private readonly IPaymentRepository _paymentRepository;
 
@@ -15,10 +14,10 @@ public class GetPaymentByOrderIdQueryHandler : IRequestHandler<GetPaymentByOrder
         _paymentRepository = paymentRepository;
     }
 
-    public async Task<PaymentDto> Handle(GetPaymentByOrderIdQuery request, CancellationToken cancellationToken)
+    public async Task<PaymentDto?> Handle(GetPaymentByOrderIdQuery request, CancellationToken cancellationToken)
     {
-        var payment = await _paymentRepository.GetByOrderIdAsync(request.OrderId, cancellationToken)
-            ?? throw new NotFoundException("Payment for order", request.OrderId);
+        var payment = await _paymentRepository.GetByOrderIdAsync(request.OrderId, cancellationToken);
+        if (payment == null) return null;
 
         return new PaymentDto
         {
@@ -35,7 +34,7 @@ public class GetPaymentByOrderIdQueryHandler : IRequestHandler<GetPaymentByOrder
     }
 }
 
-public class GetPaymentByIdQueryHandler : IRequestHandler<GetPaymentByIdQuery, PaymentDto>
+public class GetPaymentByIdQueryHandler : IRequestHandler<GetPaymentByIdQuery, PaymentDto?>
 {
     private readonly IPaymentRepository _paymentRepository;
 
@@ -44,10 +43,10 @@ public class GetPaymentByIdQueryHandler : IRequestHandler<GetPaymentByIdQuery, P
         _paymentRepository = paymentRepository;
     }
 
-    public async Task<PaymentDto> Handle(GetPaymentByIdQuery request, CancellationToken cancellationToken)
+    public async Task<PaymentDto?> Handle(GetPaymentByIdQuery request, CancellationToken cancellationToken)
     {
-        var payment = await _paymentRepository.GetByIdAsync(request.PaymentId, cancellationToken)
-            ?? throw new NotFoundException("Payment", request.PaymentId);
+        var payment = await _paymentRepository.GetByIdAsync(request.PaymentId, cancellationToken);
+        if (payment == null) return null;
 
         return new PaymentDto
         {

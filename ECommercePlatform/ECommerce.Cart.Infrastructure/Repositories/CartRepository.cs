@@ -2,82 +2,98 @@ using ECommerce.Cart.Application.Interfaces;
 using ECommerce.Cart.Domain.Entities;
 using ECommerce.Cart.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-
-// The compiler sees 'Cart' as a namespace (ECommerce.Cart.Domain.Entities.Cart)
-// and also as a class inside that namespace — they clash.
-// This alias tells the compiler exactly which one we mean when we say 'CartEntity'.
+ 
 using CartEntity = ECommerce.Cart.Domain.Entities.Cart;
-
+ 
 namespace ECommerce.Cart.Infrastructure.Repositories;
-
+ 
 public class CartRepository : ICartRepository
 {
     private readonly CartDbContext _context;
-
+ 
     public CartRepository(CartDbContext context)
     {
         _context = context;
     }
-
+ 
     public async Task<CartEntity?> GetByUserIdAsync(
         Guid userId, CancellationToken cancellationToken = default)
         => await _context.Carts
             .Include(c => c.Items)
-            .AsTracking()   // Explicit — EF tracks every change to loaded entities
             .FirstOrDefaultAsync(c => c.UserId == userId, cancellationToken);
-
+ 
     public async Task<CartEntity?> GetByIdAsync(
         Guid cartId, CancellationToken cancellationToken = default)
         => await _context.Carts
             .Include(c => c.Items)
-            .AsTracking()
             .FirstOrDefaultAsync(c => c.Id == cartId, cancellationToken);
-
+ 
     public async Task AddAsync(
         CartEntity cart, CancellationToken cancellationToken = default)
     {
         await _context.Carts.AddAsync(cart, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
     }
-
-    /// <summary>
-    /// Saves changes to an already-tracked cart.
-    ///
-    /// WHY we do NOT call _context.Carts.Update(cart) here:
-    /// Update() resets the entire entity graph state to Modified — this tells EF
-    /// to try to UPDATE every CartItem row, even ones that were just Added.
-    /// That causes a duplicate-key violation on the unique (CartId + ProductId) index.
-    ///
-    /// Instead: because we loaded the cart with AsTracking(), EF already knows
-    /// the exact state of every item:
-    ///   - Items added via cart.Items.Add()  → EF marks them as Added  → INSERT
-    ///   - Items modified (qty change)        → EF marks them as Modified → UPDATE
-    ///   - Items removed via cart.Items.Remove() → EF marks them as Deleted → DELETE
-    /// SaveChangesAsync() generates exactly the right SQL for each — no collisions.
-    /// </summary>
-   public async Task UpdateAsync(
-    CartEntity cart,
-    CancellationToken cancellationToken = default)
-{
-    Console.WriteLine("===== TRACKER =====");
-
-    foreach (var entry in _context.ChangeTracker.Entries())
+ 
+    public async Task UpdateAsync(
+        CartEntity cart, CancellationToken cancellationToken = default)
     {
-        Console.WriteLine(
-            $"{entry.Entity.GetType().Name} => {entry.State}");
-
-        if (entry.Entity is CartItem item)
-        {
-            Console.WriteLine(
-                $"ItemId={item.Id}");
-        }
+        // Only update the Cart scalar - UpdatedAt
+        await _context.Carts
+            .Where(c => c.Id == cart.Id)
+            .ExecuteUpdateAsync(s => s
+                .SetProperty(c => c.UpdatedAt, DateTime.UtcNow),
+            cancellationToken);
     }
-
-    Console.WriteLine("===================");
-
-    await _context.SaveChangesAsync(cancellationToken);
-}
-
+ 
+    /// <summary>
+    /// Explicitly inserts a single new CartItem row.
+    /// Called directly from the handler instead of cart.Items.Add()
+    /// which confuses EF's change tracker when the entity has a pre-set Guid.
+    /// </summary>
+    public async Task AddCartItemAsync(
+        CartItem item, CancellationToken cancellationToken = default)
+    {
+        await _context.CartItems.AddAsync(item, cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
+    }
+ 
+    /// <summary>
+    /// Explicitly updates quantity on an existing CartItem row.
+    /// Uses ExecuteUpdateAsync — bypasses change tracker entirely.
+    /// </summary>
+    public async Task UpdateCartItemQuantityAsync(
+        Guid itemId, int newQuantity, CancellationToken cancellationToken = default)
+    {
+        await _context.CartItems
+            .Where(i => i.Id == itemId)
+            .ExecuteUpdateAsync(s => s
+                .SetProperty(i => i.Quantity, newQuantity),
+            cancellationToken);
+    }
+ 
+    /// <summary>
+    /// Explicitly deletes a CartItem row by ID.
+    /// </summary>
+    public async Task RemoveCartItemAsync(
+        Guid itemId, CancellationToken cancellationToken = default)
+    {
+        await _context.CartItems
+            .Where(i => i.Id == itemId)
+            .ExecuteDeleteAsync(cancellationToken);
+    }
+ 
+    /// <summary>
+    /// Clears all items from a cart.
+    /// </summary>
+    public async Task ClearCartItemsAsync(
+        Guid cartId, CancellationToken cancellationToken = default)
+    {
+        await _context.CartItems
+            .Where(i => i.CartId == cartId)
+            .ExecuteDeleteAsync(cancellationToken);
+    }
+ 
     public async Task DeleteAsync(
         CartEntity cart, CancellationToken cancellationToken = default)
     {

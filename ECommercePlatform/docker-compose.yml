@@ -1,7 +1,7 @@
 services:
-
+ 
   # ───────────────── Infrastructure ─────────────────
-
+ 
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: ecommerce-sqlserver
@@ -13,7 +13,23 @@ services:
       - "1433:1433"
     volumes:
       - sqlserver_data:/var/opt/mssql
-
+    # ── ADDED: healthcheck so depends_on waits for SQL to be truly ready ──
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "/opt/mssql-tools18/bin/sqlcmd",
+          "-S", "localhost",
+          "-U", "sa",
+          "-P", "YourStrong@Passw0rd",
+          "-Q", "SELECT 1",
+          "-No"   # trust server cert (required in mssql-tools18)
+        ]
+      interval: 10s
+      timeout: 10s
+      retries: 15
+      start_period: 30s   # give SQL Server time to start before first check
+ 
   rabbitmq:
     image: rabbitmq:3-management
     container_name: ecommerce-rabbitmq
@@ -30,9 +46,10 @@ services:
       interval: 10s
       timeout: 5s
       retries: 10
-
+      start_period: 20s
+ 
   # ───────────────── Gateway ─────────────────
-
+ 
   gateway:
     build:
       context: .
@@ -46,12 +63,19 @@ services:
       JwtSettings__SecretKey: YourSuperSecretKeyThatIsAtLeast32CharactersLong!!
       JwtSettings__Issuer: ECommerce.Identity
       JwtSettings__Audience: ECommerce.Client
+    # ── FIXED: gateway waits for ALL services, not just identity + product ──
     depends_on:
       - identity-service
       - product-service
-
+      - cart-service
+      - order-service
+      - payment-service
+      - inventory-service
+      - notification-service
+    restart: on-failure
+ 
   # ───────────────── Identity Service ─────────────────
-
+ 
   identity-service:
     build:
       context: .
@@ -66,11 +90,14 @@ services:
       JwtSettings__SecretKey: YourSuperSecretKeyThatIsAtLeast32CharactersLong!!
       JwtSettings__Issuer: ECommerce.Identity
       JwtSettings__Audience: ECommerce.Client
+    # ── FIXED: condition: service_healthy waits for SQL to accept connections ──
     depends_on:
-      - sqlserver
-
+      sqlserver:
+        condition: service_healthy
+    restart: on-failure
+ 
   # ───────────────── Product Service ─────────────────
-
+ 
   product-service:
     build:
       context: .
@@ -86,10 +113,12 @@ services:
       JwtSettings__Issuer: ECommerce.Identity
       JwtSettings__Audience: ECommerce.Client
     depends_on:
-      - sqlserver
-
+      sqlserver:
+        condition: service_healthy
+    restart: on-failure
+ 
   # ───────────────── Cart Service ─────────────────
-
+ 
   cart-service:
     build:
       context: .
@@ -106,11 +135,14 @@ services:
       JwtSettings__Issuer: ECommerce.Identity
       JwtSettings__Audience: ECommerce.Client
     depends_on:
-      - sqlserver
-      - product-service
-
+      sqlserver:
+        condition: service_healthy
+      product-service:
+        condition: service_started
+    restart: on-failure
+ 
   # ───────────────── Order Service ─────────────────
-
+ 
   order-service:
     build:
       context: .
@@ -127,11 +159,14 @@ services:
       JwtSettings__Issuer: ECommerce.Identity
       JwtSettings__Audience: ECommerce.Client
     depends_on:
-      - sqlserver
-      - rabbitmq
-
+      sqlserver:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    restart: on-failure
+ 
   # ───────────────── Payment Service ─────────────────
-
+ 
   payment-service:
     build:
       context: .
@@ -148,11 +183,14 @@ services:
       JwtSettings__Issuer: ECommerce.Identity
       JwtSettings__Audience: ECommerce.Client
     depends_on:
-      - sqlserver
-      - rabbitmq
-
+      sqlserver:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    restart: on-failure
+ 
   # ───────────────── Inventory Service ─────────────────
-
+ 
   inventory-service:
     build:
       context: .
@@ -169,11 +207,14 @@ services:
       JwtSettings__Issuer: ECommerce.Identity
       JwtSettings__Audience: ECommerce.Client
     depends_on:
-      - sqlserver
-      - rabbitmq  
-
+      sqlserver:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    restart: on-failure
+ 
   # ───────────────── Notification Service ─────────────────
-
+ 
   notification-service:
     build:
       context: .
@@ -185,9 +226,12 @@ services:
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: http://+:5007
       RabbitMQ__Host: rabbitmq
+    # Notification only needs RabbitMQ — no database
     depends_on:
-      - rabbitmq
-
+      rabbitmq:
+        condition: service_healthy
+    restart: on-failure
+ 
 volumes:
   sqlserver_data:
   rabbitmq_data:

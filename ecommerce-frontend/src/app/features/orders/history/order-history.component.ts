@@ -29,8 +29,8 @@ import { OrderDto, PagedResult } from '../../../core/models/models';
                     <span class="order-id">Order #{{ order.id | slice:0:8 }}...</span>
                     <span class="order-date">{{ order.createdAt | date:'dd MMM yyyy, HH:mm' }}</span>
                   </div>
-                  <span class="status-badge" [class]="'status-' + order.status.toLowerCase()">
-                    {{ order.statusLabel }}
+                  <span class="status-badge" [class]="'status-' + getStatusClass(order.status)">
+                    {{ getStatusLabel(order.status) }}
                   </span>
                 </div>
 
@@ -119,5 +119,26 @@ export class OrderHistoryComponent implements OnInit {
       },
       error: () => this.loading.set(false)
     });
+  }
+
+  // ── Status helpers — safely handle both string and numeric enum ─────────────
+
+  getStatusClass(status: any): string {
+    if (status == null) return 'unknown';
+    const map: Record<number, string> = {
+      0: 'pending', 1: 'processing', 2: 'completed', 3: 'cancelled'
+    };
+    if (typeof status === 'number') return map[status] ?? 'unknown';
+    return String(status).toLowerCase();
+  }
+
+  getStatusLabel(status: any): string {
+    if (status == null) return 'Unknown';
+    const map: Record<number, string> = {
+      0: 'Pending', 1: 'Processing', 2: 'Completed', 3: 'Cancelled'
+    };
+    if (typeof status === 'number') return map[status] ?? 'Unknown';
+    const s = String(status);
+    return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
   }
 }

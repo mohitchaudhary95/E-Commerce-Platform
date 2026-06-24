@@ -20,7 +20,7 @@ namespace ECommerce.Shared.RabbitMQ
         private readonly RabbitMQSettings _settings;
         private readonly ILogger _logger;
 
-        private const int MaxRetries = 3;
+        private const int MaxRetries = 10;
         protected abstract string QueueName { get; }
 
         protected RabbitMQConsumerBase(IOptions<RabbitMQSettings> settings, ILogger logger)
@@ -127,8 +127,8 @@ namespace ECommerce.Shared.RabbitMQ
                 catch (Exception ex)
                 {
                     retryCount++;
-                    _logger.LogWarning(ex, "RabbitMQ connection attempt {Attempt} failed. Retrying in 5s...", retryCount);
-                    await Task.Delay(TimeSpan.FromSeconds(5), cancellationToken);
+                    _logger.LogWarning(ex, "RabbitMQ connection attempt {Attempt}/{Max} failed. Retrying in 10s...", retryCount, MaxRetries);
+                    await Task.Delay(TimeSpan.FromSeconds(10), cancellationToken);
                 }
             }
 
