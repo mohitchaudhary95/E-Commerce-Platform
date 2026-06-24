@@ -89,22 +89,26 @@ public class AddToCartCommandHandler : IRequestHandler<AddToCartCommand, CartDto
             {
                 // Product already in cart → just increase quantity
                 // EF automatically marks this as Modified
+                Console.WriteLine("EXISTING ITEM FOUND");
                 existingItem.Quantity += request.Dto.Quantity;
             }
             else
-            {
-                // New product → add a new CartItem row
-                // EF automatically marks this as Added
-                cart.Items.Add(new CartItem
-                {
-                    ProductId = product.Id,
-                    ProductName = product.Name,
-                    ProductImageUrl = product.ImageUrl,
-                    UnitPrice = product.Price,
-                    Quantity = request.Dto.Quantity,
-                    CartId = cart.Id
-                });
-            }
+{
+    Console.WriteLine("NEW ITEM BEING ADDED");
+
+    var item = new CartItem
+    {
+        ProductId = product.Id,
+        ProductName = product.Name,
+        ProductImageUrl = product.ImageUrl,
+        UnitPrice = product.Price,
+        Quantity = request.Dto.Quantity
+    };
+
+    cart.Items.Add(item);
+
+    Console.WriteLine($"NEW ITEM ID = {item.Id}");
+}
 
             // One SaveChanges — EF generates the correct SQL for each change
             await _cartRepository.UpdateAsync(cart, cancellationToken);

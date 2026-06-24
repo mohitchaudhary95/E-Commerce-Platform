@@ -55,12 +55,28 @@ public class CartRepository : ICartRepository
     ///   - Items removed via cart.Items.Remove() → EF marks them as Deleted → DELETE
     /// SaveChangesAsync() generates exactly the right SQL for each — no collisions.
     /// </summary>
-    public async Task UpdateAsync(
-        CartEntity cart, CancellationToken cancellationToken = default)
+   public async Task UpdateAsync(
+    CartEntity cart,
+    CancellationToken cancellationToken = default)
+{
+    Console.WriteLine("===== TRACKER =====");
+
+    foreach (var entry in _context.ChangeTracker.Entries())
     {
-        cart.UpdatedAt = DateTime.UtcNow;
-        await _context.SaveChangesAsync(cancellationToken);
+        Console.WriteLine(
+            $"{entry.Entity.GetType().Name} => {entry.State}");
+
+        if (entry.Entity is CartItem item)
+        {
+            Console.WriteLine(
+                $"ItemId={item.Id}");
+        }
     }
+
+    Console.WriteLine("===================");
+
+    await _context.SaveChangesAsync(cancellationToken);
+}
 
     public async Task DeleteAsync(
         CartEntity cart, CancellationToken cancellationToken = default)
